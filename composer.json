@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0"
+        "php": "^7.4 || ^8.0",
+        "enjoys/traits": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",

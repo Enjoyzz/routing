@@ -1,5 +1,5 @@
 <?php
-namespace Enjoys\Core\URL;
+namespace Enjoys\Route;
 
 use Enjoys\Core\Request;
 

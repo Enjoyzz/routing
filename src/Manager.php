@@ -14,18 +14,23 @@ class Manager
      * This property is used only if [[enablePrettyUrl]] is `true`.
      */
     public $suffix;
-    private $baseUrl = '/';
-    private $scriptUrl;
-    private $hostInfo;
+    private ?string $baseUrl = null;
+    private ?string $scriptUrl = null;
+    private ?string $hostInfo = null;
 
     /**
      * @var string the GET parameter name for route. This property is used only if [[enablePrettyUrl]] is `false`.
      */
-    public $routeParam = 'app';
+    public string $routeParam = 'route';
 
     public function __construct(array $config = [])
     {
         $this->setOptions($config);
+    }
+
+    public function setRouteParam(string $param)
+    {
+        $this->routeParam = $param;
     }
 
     public function addRules(array $rules, $append = true)
@@ -118,12 +123,11 @@ class Manager
         return [(string) $route, []];
     }
 
- 
     public function createUrl(string $route, array $params)
     {
         $baseUrl = $this->getBaseUrl();
         $anchor = isset($params['#']) ? '#' . $params['#'] : '';
-  
+
         unset($params['#'], $params[$this->routeParam]);
 
 //        $baseUrl = !$this->getOption('enableSeoURL') ? $this->getBaseUrl().'/' : $this->getBaseUrl();
@@ -185,7 +189,6 @@ class Manager
         }
         return $url . $anchor;
     }
-
     /**
      * Returns the value indicating whether result of [[createUrl()]] of rule should be cached in internal cache.
      *
@@ -203,7 +206,6 @@ class Manager
 //                // @see https://github.com/yiisoft/yii2/pull/13350#discussion_r114873476
 //                !method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null || $status === Rule::CREATE_STATUS_SUCCESS || $status & Rule::CREATE_STATUS_PARAMS_MISMATCH;
 //    }
-
 //    protected function getUrlFromCache($cacheKey, $route, $params)
 //    {
 //        if (!empty($this->_ruleCache[$cacheKey])) {
@@ -246,20 +248,19 @@ class Manager
      * @return string the created URL
      * @see createUrl()
      */
-//    public function createAbsoluteUrl($params, $scheme = null)
-//    {
-//        $params = (array) $params;
-//        $url = $this->createUrl($params);
-//        if (strpos($url, '://') === false) {
-//            $hostInfo = $this->getHostInfo();
-//            if (strncmp($url, '//', 2) === 0) {
-//                $url = substr($hostInfo, 0, strpos($hostInfo, '://')) . ':' . $url;
-//            } else {
-//                $url = $hostInfo . $url;
-//            }
-//        }
-//        return \Enjoys\Helpers\URL::ensureScheme($url, $scheme);
-//    }
+    public function createAbsoluteUrl(string $url)
+    {
+
+        if (strpos($url, '://') === false) {
+            $hostInfo = $this->getHostInfo();
+            if (strncmp($url, '//', 2) === 0) {
+                $url = substr($hostInfo, 0, strpos($hostInfo, '://')) . ':' . $url;
+            } else {
+                $url = $hostInfo . $url;
+            }
+        }
+        return $url;
+    }
 
     /**
      * 
@@ -323,12 +324,7 @@ class Manager
     public function getHostInfo()
     {
         if ($this->hostInfo === null) {
-            $request = Request::getInstance();
-            if ($request instanceof Request) {
-                $this->hostInfo = $request->getHostInfo();
-            } else {
-                throw new Exception('Please configure UrlManager::hostInfo correctly as you are running a console application.');
-            }
+            throw new Exception('Please configure UrlManager::hostInfo correctly as you are running a console application.');
         }
         return $this->hostInfo;
     }

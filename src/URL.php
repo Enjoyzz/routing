@@ -24,11 +24,11 @@ class URL
     public static function toRoute(string $route, array $params, $scheme = false)
     {
 
-        
-        if ($scheme !== false) {
-            return static::$urlManager->createAbsoluteUrl($route, is_string($scheme) ? $scheme : null);
+        $url = static::getUrlManager()->createUrl($route, $params);
+        if ($scheme === true) {
+            $url = static::getUrlManager()->createAbsoluteUrl($url);
         }
-        return static::getUrlManager()->createUrl($route, $params);
+        return $url;
     }
 
 

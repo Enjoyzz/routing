@@ -10,7 +10,8 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0",
-        "enjoys/traits": "*"
+        "enjoys/traits": "*",
+        "symfony/http-foundation": "v5.1.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
@@ -27,4 +28,3 @@
         }
     }
 }
-

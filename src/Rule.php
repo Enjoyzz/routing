@@ -134,17 +134,17 @@ class Rule
     /**
      * @var string the template for generating a new URL. This is derived from [[pattern]] and is used in generating URL.
      */
-    private $_template;
+    public $_template;
 
     /**
      * @var string the regex for matching the route part. This is used in generating URL.
      */
-    private $_routeRule;
+    public $_routeRule;
 
     /**
      * @var array list of regex for matching parameters. This is used in generating URL.
      */
-    private $_paramRules = [];
+    public $_paramRules = [];
 
     /**
      * @var array list of parameters used in the route.
@@ -177,6 +177,8 @@ class Rule
             $this->name = $this->pattern;
         }
         $this->preparePattern();
+       
+        $this->translatePattern(true);
     }
 
     /**
@@ -208,12 +210,16 @@ class Rule
         } else {
             $this->pattern = '/' . $this->pattern . '/';
         }
+       // \Enjoys\dump( $this->pattern);
+//
         if (strpos($this->route, '<') !== false && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
             foreach ($matches[1] as $name) {
                 $this->_routeParams[$name] = "<$name>";
             }
         }
-        $this->translatePattern(true);
+        
+       
+       
     }
 
     /**
@@ -237,7 +243,9 @@ class Rule
         $tr2 = [];
         $requiredPatternPart = $this->pattern;
         $oldOffset = 0;
+
         if (preg_match_all('/<([\w._-]+):?([^>]+)?>/', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+
             $appendSlash = false;
             foreach ($matches as $match) {
                 //dump($match);
@@ -278,6 +286,7 @@ class Rule
                 /* enjoys */
 
                 $this->_paramRules[$name] = $pattern === '[^\/]+' ? '' : "#^$pattern$#u";
+     
                 if (isset($this->_routeParams[$name])) {
                     $tr2["<$name>"] = "(?P<$placeholder>$pattern)";
                 }
@@ -313,13 +322,13 @@ class Rule
      * @return UrlNormalizer|null
      * @since 2.0.10
      */
-    protected function getNormalizer($manager)
-    {
-        if ($this->normalizer === null) {
-            return $manager->normalizer;
-        }
-        return $this->normalizer;
-    }
+//    protected function getNormalizer($manager)
+//    {
+//        if ($this->normalizer === null) {
+//            return $manager->normalizer;
+//        }
+//        return $this->normalizer;
+//    }
 
     /**
      * Parses the given request and returns the corresponding route and parameters.
@@ -328,64 +337,68 @@ class Rule
      * @return array|bool the parsing result. The route and the parameters are returned as an array.
      * If `false`, it means this rule cannot be used to parse this path info.
      */
-    public function parseRequest($manager, \Enjoys\Core\Request $request)
-    {
-        if ($this->mode === self::CREATION_ONLY) {
-            return false;
-        }
-        if (!empty($this->verb) && !in_array($request->getMethod(), $this->verb, true)) {
-            return false;
-        }
-        $suffix = (string) ($this->suffix === null ? $manager->suffix : $this->suffix);
-        $pathInfo = $request->getPathInfo();
-
-
-        if ($suffix !== '' && $pathInfo !== '') {
-            $n = strlen($suffix);
-            if (substr_compare($pathInfo, $suffix, -$n, $n) === 0) {
-                $pathInfo = substr($pathInfo, 0, -$n);
-                if ($pathInfo === '') {
-                    // suffix alone is not allowed
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-        if ($this->host !== null) {
-            $pathInfo = strtolower($request->getHostInfo()) . ($pathInfo === '' ? '' : '/' . $pathInfo);
-        }
-        if (!preg_match($this->pattern, $pathInfo, $matches)) {
-            return false;
-        }
-        $matches = $this->substitutePlaceholderNames($matches);
-        foreach ($this->defaults as $name => $value) {
-            if (!isset($matches[$name]) || $matches[$name] === '') {
-                $matches[$name] = $value;
-            }
-        }
-        $params = $this->defaults;
-        $tr = [];
-        foreach ($matches as $name => $value) {
-            if (isset($this->_routeParams[$name])) {
-                $tr[$this->_routeParams[$name]] = $value;
-                unset($params[$name]);
-            } elseif (isset($this->_paramRules[$name])) {
-                $params[$name] = $value;
-            }
-        }
-
-        if ($this->_routeRule !== null) {
-
-            $route = strtr($this->route, $tr);
-        } else {
-            $route = $this->route;
-        }
-
-        //_var_dump("Request parsed with URL rule: {$this->name}", __METHOD__);
-
-        return [$route, $params];
-    }
+//    public function parseRequest(Manager $manager, \Symfony\Component\HttpFoundation\Request $request)
+//    {
+//        if ($this->mode === self::CREATION_ONLY) {
+//            return false;
+//        }
+//        if (!empty($this->verb) && !in_array($request->getMethod(), $this->verb, true)) {
+//            return false;
+//        }
+//        $suffix = (string) ($this->suffix === null ? $manager->suffix : $this->suffix);
+//
+//        $pathInfo = ltrim($request->getPathInfo(), '/');
+//
+//
+//        if ($suffix !== '' && $pathInfo !== '') {
+//            $n = strlen($suffix);
+//            if (substr_compare($pathInfo, $suffix, -$n, $n) === 0) {
+//                $pathInfo = substr($pathInfo, 0, -$n);
+//             
+//                if ($pathInfo === '') {
+//                    // suffix alone is not allowed
+//                    return false;
+//                }
+//            } else {
+//                return false;
+//            }
+//        }
+//        if ($this->host !== null) {
+//            $pathInfo = ltrim(strtolower($request->getHostInfo()) . ($pathInfo === '' ? '' : '/' . $pathInfo), '/');
+//        }
+//
+//        if (!preg_match($this->pattern, $pathInfo, $matches)) {
+//            return false;
+//        }
+//        
+//        $matches = $this->substitutePlaceholderNames($matches);
+//        foreach ($this->defaults as $name => $value) {
+//            if (!isset($matches[$name]) || $matches[$name] === '') {
+//                $matches[$name] = $value;
+//            }
+//        }
+//        $params = $this->defaults;
+//        $tr = [];
+//        foreach ($matches as $name => $value) {
+//            if (isset($this->_routeParams[$name])) {
+//                $tr[$this->_routeParams[$name]] = $value;
+//                unset($params[$name]);
+//            } elseif (isset($this->_paramRules[$name])) {
+//                $params[$name] = $value;
+//            }
+//        }
+//
+//        if ($this->_routeRule !== null) {
+//
+//            $route = strtr($this->route, $tr);
+//        } else {
+//            $route = $this->route;
+//        }
+//
+//        //_var_dump("Request parsed with URL rule: {$this->name}", __METHOD__);
+//
+//        return [$route, $params];
+//    }
 
     /**
      * Creates a URL according to the given route and parameters.
@@ -394,7 +407,7 @@ class Rule
      * @param array $params the parameters
      * @return string|bool the created URL, or `false` if this rule cannot be used for creating this URL.
      */
-    public function createUrl($manager, $route, $params)
+    public function createUrl(Manager $manager, $route, $params)
     {
         if ($this->mode === self::PARSING_ONLY) {
             $this->createStatus = self::CREATE_STATUS_PARSING_ONLY;
@@ -403,8 +416,10 @@ class Rule
 
         $tr = [];
         // match the route part first
+
         if ($route !== $this->route) {
-            // _var_dump($this->_routeRule, $route);
+               
+            
             if ($this->_routeRule !== null && preg_match($this->_routeRule, $route, $matches)) {
 
                 $matches = $this->substitutePlaceholderNames($matches);
@@ -475,7 +490,7 @@ class Rule
             $url .= '?' . $query;
         }
         $this->createStatus = self::CREATE_STATUS_SUCCESS;
-        // _var_dump($url);
+        //\Enjoys\_var_dump($url);
         return $url;
     }
 
@@ -487,10 +502,10 @@ class Rule
      * @see $createStatus
      * @since 2.0.12
      */
-    public function getCreateUrlStatus()
-    {
-        return $this->createStatus;
-    }
+//    public function getCreateUrlStatus()
+//    {
+//        return $this->createStatus;
+//    }
 
     /**
      * Returns list of regex for matching parameter.
@@ -513,16 +528,16 @@ class Rule
      * @see placeholders
      * @since 2.0.7
      */
-    protected function substitutePlaceholderNames(array $matches)
-    {
-        foreach ($this->placeholders as $placeholder => $name) {
-            if (isset($matches[$placeholder])) {
-                $matches[$name] = $matches[$placeholder];
-                unset($matches[$placeholder]);
-            }
-        }
-        return $matches;
-    }
+//    protected function substitutePlaceholderNames(array $matches)
+//    {
+//        foreach ($this->placeholders as $placeholder => $name) {
+//            if (isset($matches[$placeholder])) {
+//                $matches[$name] = $matches[$placeholder];
+//                unset($matches[$placeholder]);
+//            }
+//        }
+//        return $matches;
+//    }
 
     /**
      * Trim slashes in passed string. If string begins with '//', two slashes are left as is
@@ -545,8 +560,8 @@ class Rule
      * use in rules param "encodeParams": true|false,
      * @param type $flag
      */
-    static public function setEncodeParams($flag = true)
-    {
-        //self::$encodeParams = $flag;
-    }
+//    static public function setEncodeParams($flag = true)
+//    {
+//        //self::$encodeParams = $flag;
+//    }
 }

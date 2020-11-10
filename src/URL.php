@@ -24,9 +24,13 @@ class URL
     public static function toRoute(string $route, array $params, $scheme = false)
     {
 
-        $url = static::getUrlManager()->createUrl($route, $params);
+       // $url = static::getUrlManager()->createUrl($route, $params);
+        
+        $createUrl = new CreateUrl($route, $params, static::getUrlManager());
+        $url = $createUrl->returnUrl();
+        
         if ($scheme === true) {
-            $url = static::getUrlManager()->createAbsoluteUrl($url);
+            $url = $createUrl->createAbsoluteUrl($url);
         }
         return $url;
     }

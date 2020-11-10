@@ -130,8 +130,8 @@ class Manager
 
         unset($params['#'], $params[$this->routeParam]);
 
-//        $baseUrl = !$this->getOption('enableSeoURL') ? $this->getBaseUrl().'/' : $this->getBaseUrl();
-//        if ($this->getOption('enableSeoURL')) {
+
+        if ($this->getOption('prettyUrl')) {
 //            $cacheKey = $route . '?';
 //            foreach ($params as $key => $value) {
 //                if ($value !== null) {
@@ -139,25 +139,25 @@ class Manager
 //                }
 //            }
 //            $url = $this->getUrlFromCache($cacheKey, $route, $params);
-//            if ($url === false) {
-//                /* @var $rule \Enjoys\Core\URL\Rule */
-//                foreach ($this->rules as $rule) {
+       
+                /* @var $rule \Enjoys\Core\URL\Rule */
+                foreach ($this->rules as $rule) {
 //                    if (in_array($rule, $this->_ruleCache[$cacheKey], true)) {
 //                        // avoid redundant calls of `UrlRule::createUrl()` for rules checked in `getUrlFromCache()`
 //                        // @see https://github.com/yiisoft/yii2/issues/14094
 //                        continue;
 //                    }
-//                    $url = $rule->createUrl($this, $route, $params);
-////                    dump($params);
-//                    //dump($route);
+                    $url = $rule->createUrl($this, $route, $params);
+//                    dump($params);
+                    //dump($route);
 //                    if ($this->canBeCached($rule)) {
 //                        $this->setRuleToCache($cacheKey, $rule);
 //                    }
-//                    if ($url !== false) {
-//                        break;
-//                    }
-//                }
-//            }
+                    if ($url !== false) {
+                        break;
+                    }
+                }
+        
 //            if ($url !== false) {
 //                if (strpos($url, '://') !== false) {
 //                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 8)) !== false) {
@@ -173,15 +173,15 @@ class Manager
 //                $url = ltrim($url, '/');
 //                return "$baseUrl/{$url}{$anchor}";
 //            }
-//            if ($this->suffix !== null) {
-//                $route .= $this->suffix;
-//            }
-//            if (!empty($params) && ($query = http_build_query($params)) !== '') {
-//                $route .= '?' . $query;
-//            }
-//            $route = ltrim($route, '/');
-//            return "$baseUrl/{$route}{$anchor}";
-//        }
+            if ($this->suffix !== null) {
+                $route .= $this->suffix;
+            }
+            if (!empty($params) && ($query = http_build_query($params)) !== '') {
+                $route .= '?' . $query;
+            }
+            $route = ltrim($route, '/');
+            return "$baseUrl/{$route}{$anchor}";
+        }
 
         $url = "$baseUrl?{$this->routeParam}=" . urlencode($route);
         if (!empty($params) && ($query = http_build_query($params)) !== '') {

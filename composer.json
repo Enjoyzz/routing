@@ -8,6 +8,7 @@
             "email": "deadly.info@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": "^7.4 || ^8.0",
         "enjoys/traits": "^1.0"

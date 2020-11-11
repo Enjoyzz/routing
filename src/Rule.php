@@ -81,7 +81,7 @@ class Rule
      * For example, ".html" can be used so that the URL looks like pointing to a static HTML page.
      * If not set, the value of [[UrlManager::suffix]] will be used.
      */
-    public $suffix;
+    public $suffix = '';
 
     /**
      * @var string|array the HTTP verb (e.g. GET, POST, DELETE) that this rule should match.
@@ -129,7 +129,7 @@ class Rule
      * @see createUrl()
      * @since 2.0.7
      */
-    protected $placeholders = [];
+    public $placeholders = [];
 
     /**
      * @var string the template for generating a new URL. This is derived from [[pattern]] and is used in generating URL.
@@ -186,15 +186,15 @@ class Rule
      */
     private function preparePattern()
     {
-        $this->pattern = $this->trimSlashes($this->pattern);
+        $this->pattern = \Enjoys\Route\Helpers::trimSlashes($this->pattern);
         $this->route = trim($this->route, '/');
         if ($this->host !== null) {
             $this->host = rtrim($this->host, '/');
             $this->pattern = rtrim($this->host . '/' . $this->pattern, '/');
-        } elseif ($this->pattern === '') {
-            $this->_template = '';
-            $this->pattern = '#^$#u';
-            return;
+//        } elseif ($this->pattern === '') {
+//            $this->_template = '';
+//            //$this->pattern = '#^$#u';
+//            return;
         } elseif (($pos = strpos($this->pattern, '://')) !== false) {
             if (($pos2 = strpos($this->pattern, '/', $pos + 3)) !== false) {
                 $this->host = substr($this->pattern, 0, $pos2);
@@ -244,6 +244,7 @@ class Rule
         $requiredPatternPart = $this->pattern;
         $oldOffset = 0;
 
+       
         if (preg_match_all('/<([\w._-]+):?([^>]+)?>/', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 
             $appendSlash = false;
@@ -306,7 +307,13 @@ class Rule
             $this->translatePattern(false);
             return;
         }
+       
+        
+        
         $this->_template = preg_replace('/<([\w._-]+):?([^>]+)?>/', '<$1>', $this->pattern);
+        
+         
+         
         $this->pattern = '#^' . trim(strtr($this->_template, $tr), '/') . '$#u';
         // if host starts with relative scheme, then insert pattern to match any
         if (strncmp($this->host, '//', 2) === 0) {
@@ -407,92 +414,92 @@ class Rule
      * @param array $params the parameters
      * @return string|bool the created URL, or `false` if this rule cannot be used for creating this URL.
      */
-    public function createUrl(Manager $manager, $route, $params)
-    {
-        if ($this->mode === self::PARSING_ONLY) {
-            $this->createStatus = self::CREATE_STATUS_PARSING_ONLY;
-            return false;
-        }
-
-        $tr = [];
-        // match the route part first
-
-        if ($route !== $this->route) {
-               
-            
-            if ($this->_routeRule !== null && preg_match($this->_routeRule, $route, $matches)) {
-
-                $matches = $this->substitutePlaceholderNames($matches);
-                foreach ($this->_routeParams as $name => $token) {
-                    if (isset($this->defaults[$name]) && strcmp($this->defaults[$name], $matches[$name]) === 0) {
-                        $tr[$token] = '';
-                    } else {
-                        $tr[$token] = $matches[$name];
-                    }
-                }
-            } else {
-                $this->createStatus = self::CREATE_STATUS_ROUTE_MISMATCH;
-                return false;
-            }
-        }
-        // match default params
-        // if a default param is not in the route pattern, its value must also be matched
-        foreach ($this->defaults as $name => $value) {
-            if (isset($this->_routeParams[$name])) {
-                continue;
-            }
-            if (!isset($params[$name])) {
-                // allow omit empty optional params
-                // @see https://github.com/yiisoft/yii2/issues/10970
-                if (in_array($name, $this->placeholders) && strcmp($value, '') === 0) {
-                    $params[$name] = '';
-                } else {
-                    $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-                    return false;
-                }
-            }
-            if (strcmp($params[$name], $value) === 0) { // strcmp will do string conversion automatically
-                unset($params[$name]);
-                if (isset($this->_paramRules[$name])) {
-                    $tr["<$name>"] = '';
-                }
-            } elseif (!isset($this->_paramRules[$name])) {
-                $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-                return false;
-            }
-        }
-
-        // match params in the pattern
-        foreach ($this->_paramRules as $name => $rule) {
-            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, $params[$name]))) {
-                $tr["<$name>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
-                unset($params[$name]);
-            } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
-                $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-                return false;
-            }
-        }
-
-        $url = $this->trimSlashes(strtr($this->_template, $tr));
-
-        if ($this->host !== null) {
-            $pos = strpos($url, '/', 8);
-            if ($pos !== false) {
-                $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
-            }
-        } elseif (strpos($url, '//') !== false) {
-            $url = preg_replace('#/+#', '/', trim($url, '/'));
-        }
-        if ($url !== '') {
-            $url .= ($this->suffix === null ? $manager->suffix : $this->suffix);
-        }
-        if (!empty($params) && ($query = http_build_query($params)) !== '') {
-            $url .= '?' . $query;
-        }
-        $this->createStatus = self::CREATE_STATUS_SUCCESS;
-        //\Enjoys\_var_dump($url);
-        return $url;
-    }
+//    public function createUrl(Manager $manager, $route, $params)
+//    {
+//        if ($this->mode === self::PARSING_ONLY) {
+//            $this->createStatus = self::CREATE_STATUS_PARSING_ONLY;
+//            return false;
+//        }
+//
+//        $tr = [];
+//        // match the route part first
+//
+//        if ($route !== $this->route) {
+//               
+//            
+//            if ($this->_routeRule !== null && preg_match($this->_routeRule, $route, $matches)) {
+//
+//                $matches = $this->substitutePlaceholderNames($matches);
+//                foreach ($this->_routeParams as $name => $token) {
+//                    if (isset($this->defaults[$name]) && strcmp($this->defaults[$name], $matches[$name]) === 0) {
+//                        $tr[$token] = '';
+//                    } else {
+//                        $tr[$token] = $matches[$name];
+//                    }
+//                }
+//            } else {
+//                $this->createStatus = self::CREATE_STATUS_ROUTE_MISMATCH;
+//                return false;
+//            }
+//        }
+//        // match default params
+//        // if a default param is not in the route pattern, its value must also be matched
+//        foreach ($this->defaults as $name => $value) {
+//            if (isset($this->_routeParams[$name])) {
+//                continue;
+//            }
+//            if (!isset($params[$name])) {
+//                // allow omit empty optional params
+//                // @see https://github.com/yiisoft/yii2/issues/10970
+//                if (in_array($name, $this->placeholders) && strcmp($value, '') === 0) {
+//                    $params[$name] = '';
+//                } else {
+//                    $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
+//                    return false;
+//                }
+//            }
+//            if (strcmp($params[$name], $value) === 0) { // strcmp will do string conversion automatically
+//                unset($params[$name]);
+//                if (isset($this->_paramRules[$name])) {
+//                    $tr["<$name>"] = '';
+//                }
+//            } elseif (!isset($this->_paramRules[$name])) {
+//                $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
+//                return false;
+//            }
+//        }
+//
+//        // match params in the pattern
+//        foreach ($this->_paramRules as $name => $rule) {
+//            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, $params[$name]))) {
+//                $tr["<$name>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
+//                unset($params[$name]);
+//            } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
+//                $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
+//                return false;
+//            }
+//        }
+//
+//        $url = \Enjoys\Route\Helpers::trimSlashes(strtr($this->_template, $tr));
+//
+//        if ($this->host !== null) {
+//            $pos = strpos($url, '/', 8);
+//            if ($pos !== false) {
+//                $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
+//            }
+//        } elseif (strpos($url, '//') !== false) {
+//            $url = preg_replace('#/+#', '/', trim($url, '/'));
+//        }
+//        if ($url !== '') {
+//            $url .= ($this->suffix === null ? $manager->suffix : $this->suffix);
+//        }
+//        if (!empty($params) && ($query = http_build_query($params)) !== '') {
+//            $url .= '?' . $query;
+//        }
+//        $this->createStatus = self::CREATE_STATUS_SUCCESS;
+//        //\Enjoys\_var_dump($url);
+//        return $url;
+//    }
 
     /**
      * Returns status of the URL creation after the last [[createUrl()]] call.
@@ -546,13 +553,7 @@ class Rule
      * @param string $string
      * @return string
      */
-    private function trimSlashes($string)
-    {
-        if (strncmp($string, '//', 2) === 0) {
-            return '//' . trim($string, '/');
-        }
-        return trim($string, '/');
-    }
+
 
     /**
      * removed

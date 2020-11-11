@@ -280,7 +280,17 @@ class Manager
      */
     public function setBaseUrl($value = null)
     {
-        $this->baseUrl = $value ?? rtrim($value, '/');
+        $baseUrl = $value ?? '/';
+        
+        if(strpos($baseUrl, '/', -1) === false){
+            $baseUrl = $baseUrl . '/';
+        }
+        
+        if(strpos($value, '/', 0) === false){
+            $baseUrl = '/' . $baseUrl;
+        }
+        
+        $this->baseUrl = $baseUrl;
     }
 
     /**

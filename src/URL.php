@@ -26,7 +26,8 @@ class URL
 
        // $url = static::getUrlManager()->createUrl($route, $params);
         
-        $createUrl = new CreateUrl($route, $params, static::getUrlManager());
+        $createUrl = new \Enjoys\Route\Url\Create($route, $params, static::getUrlManager());
+        
         $url = $createUrl->returnUrl();
         
         if ($scheme === true) {

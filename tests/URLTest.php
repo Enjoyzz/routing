@@ -92,7 +92,7 @@ class URLTest extends \PHPUnit\Framework\TestCase
         \Enjoys\Route\URL::setUrlmanager($urlManager);
         
         $buildedUrl = \Enjoys\Route\URL::make($url, $scheme);
-        $this->assertSame($expect, urldecode($buildedUrl));
+        $this->assertSame($expect, $buildedUrl);
     }
     
     public function data_test_3()
@@ -106,8 +106,10 @@ class URLTest extends \PHPUnit\Framework\TestCase
             ['/', true, ['Music', 'category' => 'Rock'], false, '/musics/Rock/desc/'],
             ['/', true, ['Digits'], false, '/digits/1.html'],
             ['/sub', true, ['Digits', 'id' => 65], false, '/sub/digits/65.html'],
-            
-
+            ['/', true, ['Digits', 'text' => 'Привет'], false, '/digits/1.html?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
+            ['/', true, ['Encode\True', 'text' => 'Привет'], false, '/encode/%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
+            ['/', true, ['Encode\False', 'text' => 'Привет'], false, '/encode/Привет'],
+            ['/', true, ['Search', 'text' => 'Привет'], false, 'yandex.ru/s/?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
         ];
     }
 }

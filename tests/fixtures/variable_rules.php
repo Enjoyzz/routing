@@ -22,4 +22,19 @@ return [
             'sort' => 'desc'
         ]
     ],
+    [
+        'pattern' => 'encode/<text:.*>',
+        'route' => 'Encode\True',
+    ],
+    [
+        'pattern' => 'encode/<text:.*>',
+        'route' => 'Encode\False',
+        'encodeParams' => false
+    ],
+    [
+        'pattern' => 's',
+        'route' => 'Search',
+        'suffix' => '/',
+        'host' => 'http://yandex.ru'
+    ]    
 ];

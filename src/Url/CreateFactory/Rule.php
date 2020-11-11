@@ -60,7 +60,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
                     !is_array($this->params[$name]) &&
                     ($_rule === '' || preg_match($_rule, (string) $this->params[$name]))
             ) {
-                $translate["<$name>"] = $this->params[$name];
+                $translate["<$name>"] = ($rule->encodeParams) ? urlencode((string) $this->params[$name]) : $this->params[$name];
 
                 unset($this->params[$name]);
             } elseif (
@@ -75,6 +75,12 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
 
         $url = \Enjoys\Route\Helpers::trimSlashes(strtr($rule->_template, $translate));
 
+        return $this->buildUrl($url, $rule);
+    }
+
+    private function buildUrl($url, \Enjoys\Route\Rule $rule): string
+    {
+
         if ($rule->host !== null) {
             $pos = strpos($url, '/', 8);
             if ($pos !== false) {
@@ -88,6 +94,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
             $url .= ($rule->suffix === null ? $manager->suffix : $rule->suffix);
         }
         if (!empty($this->params) && ($query = http_build_query($this->params)) !== '') {
+
             $url .= '?' . $query;
         }
         return $url;

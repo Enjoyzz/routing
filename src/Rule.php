@@ -156,6 +156,7 @@ class Rule
         foreach ($config as $name => $value) {
             $this->$name = $value;
         }
+     
         // dump($config);
         if ($this->pattern === null) {
             throw new ConfigRuleException('UrlRule::pattern must be set.');

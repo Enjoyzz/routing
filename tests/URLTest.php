@@ -109,7 +109,8 @@ class URLTest extends \PHPUnit\Framework\TestCase
             ['/', true, ['Digits', 'text' => 'Привет'], false, '/digits/1.html?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
             ['/', true, ['Encode\True', 'text' => 'Привет'], false, '/encode/%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
             ['/', true, ['Encode\False', 'text' => 'Привет'], false, '/encode/Привет'],
-            ['/', true, ['Search', 'text' => 'Привет'], false, 'yandex.ru/s/?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
+            ['/', true, ['Search', 'text' => 'Привет'], false, 'http://yandex.ru/s/?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
+            ['/', false, ['Search', 'text' => 'Привет'], false, '/?route=Search&text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
         ];
     }
 }

@@ -31,7 +31,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
             return parent::returnUrl();
         }
 
-        return "$this->baseUrl{$url}{$this->anchor}";
+        return "{$url}{$this->anchor}";
     }
 
     /**
@@ -73,16 +73,20 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
 
 
 
-        $url = \Enjoys\Route\Helpers::trimSlashes(strtr($rule->_template, $translate));
+        $url = $this->buildUrl(\Enjoys\Route\Helpers::trimSlashes(strtr($rule->_template, $translate)), $rule);
 
-        return $this->buildUrl($url, $rule);
+        if ($rule->host === null) {
+            return  $this->baseUrl .  $url;
+        }
+
+        return $url;
     }
 
     private function buildUrl($url, \Enjoys\Route\Rule $rule): string
     {
 
         if ($rule->host !== null) {
-            $pos = strpos($url, '/', 8);
+            $pos = strpos($url, '//', 0) + 1;
             if ($pos !== false) {
                 $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
             }

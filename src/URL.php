@@ -24,8 +24,7 @@ class URL
     public static function toRoute(string $route, array $params, $scheme = false)
     {
 
-       // $url = static::getUrlManager()->createUrl($route, $params);
-        
+       
         $createUrl = new \Enjoys\Route\Url\Create($route, $params, static::getUrlManager());
         
         $url = $createUrl->returnUrl();
@@ -37,12 +36,7 @@ class URL
     }
 
 
-//    
-//    public static function canonical($route, $params)
-//    {
-//        return static::getUrlManager()->createAbsoluteUrl(array_merge((array)$route, $params));
-//    }    
-//            
+
 
     public static function make($url = '', $scheme = false){
         if (is_array($url)) {
@@ -53,76 +47,19 @@ class URL
         }
 //       // $url = Yii::getAlias($url);
 //        if ($url === '') {
-//            $url = Request::getInstance()->getUrl();
+//            $url = $this->requ->getUrl();
 //        }
-//        if ($scheme === false) {
-//            return $url;
-//        }
+        if ($scheme === false) {
+            return $url;
+        }
 //        if (static::isRelative($url)) {
 //            // turn relative URL into absolute
 //            $url = static::$urlManager->getHostInfo() . '/' . ltrim($url, '/');
 //        }
-//        return static::ensureScheme($url, $scheme);
+        return Helpers::ensureScheme($url, $scheme);
     }
     
   
-//    public static function ensureScheme($url, $scheme)
-//    {
-//        if (static::isRelative($url) || !is_string($scheme)) {
-//            return $url;
-//        }
-//        if (substr($url, 0, 2) === '//') {
-//            // e.g. //example.com/path/to/resource
-//            return $scheme === '' ? $url : "$scheme:$url";
-//        }
-//        if (($pos = strpos($url, '://')) !== false) {
-//            if ($scheme === '') {
-//                $url = substr($url, $pos + 1);
-//            } else {
-//                $url = $scheme . substr($url, $pos);
-//            }
-//        }
-//        return $url;
-//    }
-//
-//    public static function base($scheme = false)
-//    {
-//        $url = static::$urlManager->getBaseUrl();
-//        if ($scheme !== false) {
-//            $url = static::$urlManager->getHostInfo() . $url;
-//            $url = static::ensureScheme($url, $scheme);
-//        }
-//        return $url;
-//    }
-
-   
-//    public static function home($scheme = false)
-//    {
-//        $url = Yii::$app->getHomeUrl();
-//        if ($scheme !== false) {
-//            $url = static::$urlManager->getHostInfo() . $url;
-//            $url = static::ensureScheme($url, $scheme);
-//        }
-//        return $url;
-//    }
-    /**
-     * Returns a value indicating whether a URL is relative.
-     * A relative URL does not have host info part.
-     * @param string $url the URL to be checked
-     * @return bool whether the URL is relative
-     */
-//    public static function isRelative($url)
-//    {
-//        return strncmp($url, '//', 2) && strpos($url, '://') === false;
-//    }
-
-//    public static function current(array $params = [], $scheme = false)
-//    {
-//        $currentParams = Request::getInstance()->getQueryParams();
-//        $currentParams[0] = '/' . Request::getInstance()->getRoute();
-//        $route = array_replace_recursive($currentParams, $params);
-//        return static::toRoute($route, $scheme);
-//    }
     
   
 

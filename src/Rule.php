@@ -149,7 +149,7 @@ class Rule
     /**
      * @var array list of parameters used in the route.
      */
-    private $_routeParams = [];
+    public $_routeParams = [];
 
     public function __construct($config)
     {
@@ -409,113 +409,6 @@ class Rule
 //    }
 
     /**
-     * Creates a URL according to the given route and parameters.
-     * @param UrlManager $manager the URL manager
-     * @param string $route the route. It should not have slashes at the beginning or the end.
-     * @param array $params the parameters
-     * @return string|bool the created URL, or `false` if this rule cannot be used for creating this URL.
-     */
-//    public function createUrl(Manager $manager, $route, $params)
-//    {
-//        if ($this->mode === self::PARSING_ONLY) {
-//            $this->createStatus = self::CREATE_STATUS_PARSING_ONLY;
-//            return false;
-//        }
-//
-//        $tr = [];
-//        // match the route part first
-//
-//        if ($route !== $this->route) {
-//               
-//            
-//            if ($this->_routeRule !== null && preg_match($this->_routeRule, $route, $matches)) {
-//
-//                $matches = $this->substitutePlaceholderNames($matches);
-//                foreach ($this->_routeParams as $name => $token) {
-//                    if (isset($this->defaults[$name]) && strcmp($this->defaults[$name], $matches[$name]) === 0) {
-//                        $tr[$token] = '';
-//                    } else {
-//                        $tr[$token] = $matches[$name];
-//                    }
-//                }
-//            } else {
-//                $this->createStatus = self::CREATE_STATUS_ROUTE_MISMATCH;
-//                return false;
-//            }
-//        }
-//        // match default params
-//        // if a default param is not in the route pattern, its value must also be matched
-//        foreach ($this->defaults as $name => $value) {
-//            if (isset($this->_routeParams[$name])) {
-//                continue;
-//            }
-//            if (!isset($params[$name])) {
-//                // allow omit empty optional params
-//                // @see https://github.com/yiisoft/yii2/issues/10970
-//                if (in_array($name, $this->placeholders) && strcmp($value, '') === 0) {
-//                    $params[$name] = '';
-//                } else {
-//                    $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-//                    return false;
-//                }
-//            }
-//            if (strcmp($params[$name], $value) === 0) { // strcmp will do string conversion automatically
-//                unset($params[$name]);
-//                if (isset($this->_paramRules[$name])) {
-//                    $tr["<$name>"] = '';
-//                }
-//            } elseif (!isset($this->_paramRules[$name])) {
-//                $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-//                return false;
-//            }
-//        }
-//
-//        // match params in the pattern
-//        foreach ($this->_paramRules as $name => $rule) {
-//            if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, $params[$name]))) {
-//                $tr["<$name>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
-//                unset($params[$name]);
-//            } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
-//                $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-//                return false;
-//            }
-//        }
-//
-//        $url = \Enjoys\Route\Helpers::trimSlashes(strtr($this->_template, $tr));
-//
-//        if ($this->host !== null) {
-//            $pos = strpos($url, '/', 8);
-//            if ($pos !== false) {
-//                $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
-//            }
-//        } elseif (strpos($url, '//') !== false) {
-//            $url = preg_replace('#/+#', '/', trim($url, '/'));
-//        }
-//        if ($url !== '') {
-//            $url .= ($this->suffix === null ? $manager->suffix : $this->suffix);
-//        }
-//        if (!empty($params) && ($query = http_build_query($params)) !== '') {
-//            $url .= '?' . $query;
-//        }
-//        $this->createStatus = self::CREATE_STATUS_SUCCESS;
-//        //\Enjoys\_var_dump($url);
-//        return $url;
-//    }
-
-    /**
-     * Returns status of the URL creation after the last [[createUrl()]] call.
-     *
-     * @return null|int Status of the URL creation after the last [[createUrl()]] call. `null` if rule does not provide
-     * info about create status.
-     * @see $createStatus
-     * @since 2.0.12
-     */
-//    public function getCreateUrlStatus()
-//    {
-//        return $this->createStatus;
-//    }
-
-    /**
      * Returns list of regex for matching parameter.
      * @return array parameter keys and regexp rules.
      *
@@ -536,16 +429,16 @@ class Rule
      * @see placeholders
      * @since 2.0.7
      */
-//    protected function substitutePlaceholderNames(array $matches)
-//    {
-//        foreach ($this->placeholders as $placeholder => $name) {
-//            if (isset($matches[$placeholder])) {
-//                $matches[$name] = $matches[$placeholder];
-//                unset($matches[$placeholder]);
-//            }
-//        }
-//        return $matches;
-//    }
+    protected function substitutePlaceholderNames(array $matches)
+    {
+        foreach ($this->placeholders as $placeholder => $name) {
+            if (isset($matches[$placeholder])) {
+                $matches[$name] = $matches[$placeholder];
+                unset($matches[$placeholder]);
+            }
+        }
+        return $matches;
+    }
 
     /**
      * Trim slashes in passed string. If string begins with '//', two slashes are left as is

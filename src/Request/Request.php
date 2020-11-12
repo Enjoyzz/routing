@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace Enjoys\Route;
+namespace Enjoys\Route\Request;
 
 /**
- * Class ParseRequest
+ * Class Request
  *
  * @author Enjoys
  */
-class ParseRequest
+class Request extends \Symfony\Component\HttpFoundation\Request implements RequestInterface
 {
-    //put your code here
+   
 }

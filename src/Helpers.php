@@ -25,4 +25,28 @@ class Helpers
         }
         return trim($string, '/');
     }
+
+    public static function isRelative($url)
+    {
+        return strncmp($url, '//', 2) && strpos($url, '://') === false;
+    }
+
+    public static function ensureScheme($url, $scheme)
+    {
+        if (self::isRelative($url) || !is_string($scheme)) {
+            return $url;
+        }
+        if (substr($url, 0, 2) === '//') {
+            // e.g. //example.com/path/to/resource
+            return $scheme === '' ? $url : "$scheme:$url";
+        }
+        if (($pos = strpos($url, '://')) !== false) {
+            if ($scheme === '') {
+                $url = substr($url, $pos + 1);
+            } else {
+                $url = $scheme . substr($url, $pos);
+            }
+        }
+        return $url;
+    }
 }

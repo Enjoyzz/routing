@@ -113,4 +113,32 @@ class URLTest extends \PHPUnit\Framework\TestCase
             ['/', false, ['Search', 'text' => 'Привет'], false, '/?route=Search&text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82'],
         ];
     }
+    
+    /**
+     * @dataProvider data_test_4
+     */
+    public function test_4($baseUrl, $prettyUrl, $url, $scheme, $expect)
+    {
+        $urlManager = new \Enjoys\Route\Manager([
+            'baseUrl' => $baseUrl,
+            'hostInfo' => 'http://localhost',
+            'prettyUrl' => $prettyUrl,
+        ]);
+        $urlManager->addRules(require(__DIR__.'/fixtures/dinamic_route.php'));
+        
+        \Enjoys\Route\URL::setUrlmanager($urlManager);
+        
+        $buildedUrl = \Enjoys\Route\URL::make($url, $scheme);
+        $this->assertSame($expect, $buildedUrl);
+    }
+    
+    public function data_test_4()
+    {
+        return [
+            ['/', true, ['post\view', 'id' => 1], false, '/post/1/'],
+            ['/', true, ['comment\view', 'id' => 1], false, '/comment/1/'],
+            ['/', true, ['comment\view5'], false, '/comment/view5/55/'],
+
+        ];
+    }    
 }

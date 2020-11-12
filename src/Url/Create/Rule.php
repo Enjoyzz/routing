@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Enjoys\Route\Url\CreateFactory;
+namespace Enjoys\Route\Url\Create;
 
 /**
  * Class Rule
@@ -44,8 +44,33 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
         $translate = [];
 
         if ($this->route !== $rule->route) {
-            return false;
+
+
+//\Enjoys\dump($rule->_routeRule);
+//\Enjoys\dump($this->route);
+
+            if ($rule->_routeRule !== null && preg_match($rule->_routeRule, $this->route, $matches)) {
+
+
+                $matches = $this->substitutePlaceholderNames($matches, $rule);
+  
+                foreach ($rule->_routeParams as $name => $token) {
+                 
+                
+                    if (isset($rule->defaults[$name]) && strcmp((string) $rule->defaults[$name], $matches[$name]) === 0) {
+                        $translate[$token] = '';
+                    } else {
+                        $translate[$token] = $matches[$name];
+                        unset($rule->_paramRules[$name], $rule->defaults[$name]);
+                    }
+                }
+               
+            } else {
+                return false;
+            }
         }
+
+
 
         // match default params
         foreach ($rule->defaults as $name => $value) {
@@ -55,6 +80,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
         // match params in the pattern
 
         foreach ($rule->_paramRules as $name => $_rule) {
+          
             if (
                     array_key_exists($name, $this->params) &&
                     !is_array($this->params[$name]) &&
@@ -63,10 +89,12 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
                 $translate["<$name>"] = ($rule->encodeParams) ? urlencode((string) $this->params[$name]) : $this->params[$name];
 
                 unset($this->params[$name]);
+                
             } elseif (
                     !isset($rule->defaults[$name]) ||
                     isset($this->params[$name])
             ) {
+              
                 return false;
             }
         }
@@ -76,7 +104,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
         $url = $this->buildUrl(\Enjoys\Route\Helpers::trimSlashes(strtr($rule->_template, $translate)), $rule);
 
         if ($rule->host === null) {
-            return  $this->baseUrl .  $url;
+            return $this->baseUrl . $url;
         }
 
         return $url;
@@ -102,5 +130,16 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
             $url .= '?' . $query;
         }
         return $url;
+    }
+
+    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule)
+    {
+        foreach ($rule->placeholders as $placeholder => $name) {
+            if (isset($matches[$placeholder])) {
+                $matches[$name] = $matches[$placeholder];
+                unset($matches[$placeholder]);
+            }
+        }
+        return $matches;
     }
 }

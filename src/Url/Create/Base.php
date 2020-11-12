@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Enjoys\Route\Url\CreateFactory;
+namespace Enjoys\Route\Url\Create;
 
 /**
  * Class Base

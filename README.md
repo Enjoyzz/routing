@@ -1,4 +1,2 @@
-# routing
+# routing like yii2
 ```php
-//like yii2
-URL::make(class, [<array> params);

@@ -13,7 +13,7 @@ class Manager
      * For example, ".html" can be used so that the URL looks like pointing to a static HTML page.
      * This property is used only if [[enablePrettyUrl]] is `true`.
      */
-    public $suffix;
+    public string $suffix = '';
     private ?string $baseUrl = null;
     private ?string $scriptUrl = null;
     private ?string $hostInfo = null;
@@ -26,6 +26,11 @@ class Manager
     public function __construct(array $config = [])
     {
         $this->setOptions($config);
+    }
+    
+    public function setSuffix(string $suffix = '')
+    {
+        $this->suffix = $suffix;
     }
 
     public function setRouteParam(string $param)

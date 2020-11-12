@@ -325,89 +325,7 @@ class Rule
         }
     }
 
-    /**
-     * @param UrlManager $manager the URL manager
-     * @return UrlNormalizer|null
-     * @since 2.0.10
-     */
-//    protected function getNormalizer($manager)
-//    {
-//        if ($this->normalizer === null) {
-//            return $manager->normalizer;
-//        }
-//        return $this->normalizer;
-//    }
-
-    /**
-     * Parses the given request and returns the corresponding route and parameters.
-     * @param UrlManager $manager the URL manager
-     * @param Request $request the request component
-     * @return array|bool the parsing result. The route and the parameters are returned as an array.
-     * If `false`, it means this rule cannot be used to parse this path info.
-     */
-//    public function parseRequest(Manager $manager, \Symfony\Component\HttpFoundation\Request $request)
-//    {
-//        if ($this->mode === self::CREATION_ONLY) {
-//            return false;
-//        }
-//        if (!empty($this->verb) && !in_array($request->getMethod(), $this->verb, true)) {
-//            return false;
-//        }
-//        $suffix = (string) ($this->suffix === null ? $manager->suffix : $this->suffix);
-//
-//        $pathInfo = ltrim($request->getPathInfo(), '/');
-//
-//
-//        if ($suffix !== '' && $pathInfo !== '') {
-//            $n = strlen($suffix);
-//            if (substr_compare($pathInfo, $suffix, -$n, $n) === 0) {
-//                $pathInfo = substr($pathInfo, 0, -$n);
-//             
-//                if ($pathInfo === '') {
-//                    // suffix alone is not allowed
-//                    return false;
-//                }
-//            } else {
-//                return false;
-//            }
-//        }
-//        if ($this->host !== null) {
-//            $pathInfo = ltrim(strtolower($request->getHostInfo()) . ($pathInfo === '' ? '' : '/' . $pathInfo), '/');
-//        }
-//
-//        if (!preg_match($this->pattern, $pathInfo, $matches)) {
-//            return false;
-//        }
-//        
-//        $matches = $this->substitutePlaceholderNames($matches);
-//        foreach ($this->defaults as $name => $value) {
-//            if (!isset($matches[$name]) || $matches[$name] === '') {
-//                $matches[$name] = $value;
-//            }
-//        }
-//        $params = $this->defaults;
-//        $tr = [];
-//        foreach ($matches as $name => $value) {
-//            if (isset($this->_routeParams[$name])) {
-//                $tr[$this->_routeParams[$name]] = $value;
-//                unset($params[$name]);
-//            } elseif (isset($this->_paramRules[$name])) {
-//                $params[$name] = $value;
-//            }
-//        }
-//
-//        if ($this->_routeRule !== null) {
-//
-//            $route = strtr($this->route, $tr);
-//        } else {
-//            $route = $this->route;
-//        }
-//
-//        //_var_dump("Request parsed with URL rule: {$this->name}", __METHOD__);
-//
-//        return [$route, $params];
-//    }
-
+   
     /**
      * Returns list of regex for matching parameter.
      * @return array parameter keys and regexp rules.
@@ -440,23 +358,5 @@ class Rule
         return $matches;
     }
 
-    /**
-     * Trim slashes in passed string. If string begins with '//', two slashes are left as is
-     * in the beginning of a string.
-     *
-     * @param string $string
-     * @return string
-     */
 
-
-    /**
-     * removed
-     * 
-     * use in rules param "encodeParams": true|false,
-     * @param type $flag
-     */
-//    static public function setEncodeParams($flag = true)
-//    {
-//        //self::$encodeParams = $flag;
-//    }
 }

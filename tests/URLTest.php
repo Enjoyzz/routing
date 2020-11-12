@@ -141,7 +141,8 @@ class URLTest extends \PHPUnit\Framework\TestCase
             ['/', true, ['comment\view', 'id' => 1], false, '/comment/1/'],
             ['/', true, ['comment\view5'], false, '/comment/view5/55/'],
             ['/', true, ['comment\view5'], false, '/comment/view5/55/'],
-            ['/', true, ['\Song\A', 'action' => 'A', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@A_1'],
+            ['/', true, ['\Song\<action>', 'action' => 'A', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@A_1'],
+            ['/', true, ['\Song\<action>', 'action' => 'AbC', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@AbC_1'],
         ];
     }
 }

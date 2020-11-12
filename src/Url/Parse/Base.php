@@ -26,35 +26,23 @@ class Base implements \Enjoys\Route\Url\ParseInterface
         $this->manager = $manager;
         $this->request = $request;
     }
-    
+
     public function getManager()
     {
         return $this->manager;
-    }   
-    
-   public function getRequest()
+    }
+
+    public function getRequest()
     {
         return $this->request;
-    }        
+    }
 
     public function parse()
     {
-        $suffix = (string) $this->getManager()->suffix;
-        $pathInfo = $this->request->getPathInfo();
-
-        if ($suffix !== '' && $pathInfo !== '') {
-            $n = strlen($this->getManager()->suffix);
-            if (substr_compare($pathInfo, $this->getManager()->suffix, -$n, $n) === 0) {
-                $pathInfo = substr($pathInfo, 0, -$n);
-                if ($pathInfo === '') {
-                    // suffix alone is not allowed
-                    return false;
-                }
-            } else {
-                // suffix doesn't match
-                return false;
-            }
-        }
-        return ['route' => $pathInfo, 'params' => []];
+        $routeParam = $this->getManager()->getRouteParam();
+        $route = $this->request->get($routeParam, $this->request->getPathInfo());
+        $params = $this->request->query->all();
+        unset($params[$routeParam]);
+        return ['route' => $route, 'params' => $params];
     }
 }

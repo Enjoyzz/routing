@@ -65,7 +65,7 @@ class Rule extends Base implements \Enjoys\Route\Url\ParseInterface
             }
         }
         if ($rule->host !== null) {
-            $pathInfo = ltrim(strtolower($this->getRequest()->getHostInfo()) . ($pathInfo === '' ? '' : '/' . $pathInfo), '/');
+            $pathInfo = ltrim(strtolower($this->getRequest()->getHost()) . ($pathInfo === '' ? '' : '/' . $pathInfo), '/');
         }
 
         if (!preg_match($rule->pattern, $pathInfo, $matches)) {
@@ -74,7 +74,7 @@ class Rule extends Base implements \Enjoys\Route\Url\ParseInterface
 
         $matches = $this->substitutePlaceholderNames($matches, $rule);
 
-        \Enjoys\dump($matches);
+      //  \Enjoys\dump($matches);
 
         foreach ($rule->defaults as $name => $value) {
             if (!isset($matches[$name]) || $matches[$name] === '') {

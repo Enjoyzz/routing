@@ -46,8 +46,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
         if ($this->route !== $rule->route) {
 
 
-//\Enjoys\dump($rule->_routeRule);
-//\Enjoys\dump($this->route);
+//\Enjoys\_var_dump($this->route, $rule->_routeRule);
 
             if ($rule->_routeRule !== null && preg_match($rule->_routeRule, $this->route, $matches)) {
 

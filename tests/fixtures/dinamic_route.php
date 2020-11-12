@@ -18,7 +18,7 @@ return [
     [
         'name' => 'song - vlessons',
         'pattern' => '<band>/<song>.html@<action>_<data_id:\d+>',
-        'route' => '\Song\<action>',
+        'route' => '\Song\\\<action>',
         'callback' => [
             '<action>' => [
                 'strtolower',

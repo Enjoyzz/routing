@@ -17,5 +17,5 @@ namespace Enjoys\Route\Request;
  */
 class Request extends \Symfony\Component\HttpFoundation\Request implements RequestInterface
 {
-   
+ 
 }

@@ -25,9 +25,10 @@ return [
     [
         'pattern' => 'encode/<text:.*>',
         'route' => 'Encode\True',
+        'encodeParams' => true
     ],
     [
-        'pattern' => 'encode/<text:.*>',
+        'pattern' => 'encode_f/<text:.*>',
         'route' => 'Encode\False',
         'encodeParams' => false
     ],
@@ -36,5 +37,10 @@ return [
         'route' => 'Search',
         'suffix' => '/',
         'host' => 'http://yandex.ru'
-    ]    
+    ],
+    [
+        'pattern' => 'search',
+        'route' => 'Search',
+        'suffix' => '/',
+    ]
 ];

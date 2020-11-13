@@ -22,8 +22,8 @@ class Create
     private string $route;
     private array $params;
 
-    private const BASE_CLASS = Create\Base::class;
-    private const RULE_CLASS = Create\Rule::class;
+    private const BASE_CLASS = Create\BaseCreate::class;
+    private const RULE_CLASS = Create\RuleCreate::class;
 
     public function __construct(string $route, array $params, \Enjoys\Route\Manager $manager)
     {

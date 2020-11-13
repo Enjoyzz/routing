@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 declare(strict_types=1);
 
 namespace Enjoys\Route\Url\Create;
@@ -15,7 +9,7 @@ namespace Enjoys\Route\Url\Create;
  *
  * @author Enjoys
  */
-class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
+class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
 {
 
     public function returnUrl(): string
@@ -109,14 +103,14 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
         return $url;
     }
 
-    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule)
-    {
-        foreach ($rule->placeholders as $placeholder => $name) {
-            if (isset($matches[$placeholder])) {
-                $matches[$name] = $matches[$placeholder];
-                unset($matches[$placeholder]);
-            }
-        }
-        return $matches;
-    }
+//    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule)
+//    {
+//        foreach ($rule->placeholders as $placeholder => $name) {
+//            if (isset($matches[$placeholder])) {
+//                $matches[$name] = $matches[$placeholder];
+//                unset($matches[$placeholder]);
+//            }
+//        }
+//        return $matches;
+//    }
 }

@@ -15,7 +15,7 @@ namespace Enjoys\Route\Url\Create;
  *
  * @author Enjoys
  */
-class Base implements \Enjoys\Route\Url\CreateInterface
+class BaseCreate implements \Enjoys\Route\Url\CreateInterface
 {
 
     protected \Enjoys\Route\Manager $manager;

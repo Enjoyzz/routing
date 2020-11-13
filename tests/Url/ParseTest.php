@@ -36,19 +36,20 @@ class ParseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($excpect_route, $parsedRequest->getRoute());
         $this->assertSame($expect_params, $parsedRequest->getParams());
     }
-    
+
     public function data_1()
     {
         return [
-            ['http://localhost/Band/Song.html@lesson_100', '\Song\Lesson', ['band'=>'Band', 'song' => 'Song', 'data_id' => '100']],
-            ['http://localhost/Band/Song.html@leSSon_100', '\Song\Lesson', ['band'=>'Band', 'song' => 'Song', 'data_id' => '100']],
-            ['/Band/Song.html@rAnDoM_100', '\Song\Random', ['band'=>'Band', 'song' => 'Song', 'data_id' => '100']],
-            ['/Band/Song.html@lesson_100', '\Song\Lesson', ['band'=>'Band', 'song' => 'Song', 'data_id' => '100']],
+            ['http://localhost/Band/Song.html@lesson_100', '\Song\Lesson', ['band' => 'Band', 'song' => 'Song', 'data_id' => '100']],
+            ['http://localhost/Band/Song.html@leSSon_100', '\Song\Lesson', ['band' => 'Band', 'song' => 'Song', 'data_id' => '100']],
+            ['/Band/Song.html@rAnDoM_100', '\Song\Random', ['band' => 'Band', 'song' => 'Song', 'data_id' => '100']],
+            ['/Band/Song.html@lesson_100', '\Song\Lesson', ['band' => 'Band', 'song' => 'Song', 'data_id' => '100']],
             ['/admin/post/news/create', '\news\PostCreate', []],
             ['/admin/rAnDoM/mOdUlle/create', '\mOdUlle\RandomCreate', []],
             ['/anything?test=5', '/anything', ['test' => '5']],
         ];
     }
+
     /**
      * @dataProvider data_2
      */
@@ -67,12 +68,18 @@ class ParseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($excpect_route, $parsedRequest->getRoute());
         $this->assertSame($expect_params, $parsedRequest->getParams());
     }
-    
+
     public function data_2()
     {
         return [
-            ['/', false, '/?route=Digits&id=2', 'Digits', ['id'=>'2']],
-            ['/', true, '/?route=Digits&id=2', 'Digits', ['id'=>'2']],
+            ['/', false, '/?route=Digits&id=2', 'Digits', ['id' => '2']],
+            ['/', true, '/?route=Digits&id=2', 'Digits', ['id' => '2']],
+            ['/', true, '/digits/1.html', 'Digits', ['id' => '1']],
+//            ['/', true, '/encode_f/Привет', 'Encode\False', ['text' => 'Привет']],
+//            ['/', true, '/encode/%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82', 'Encode\True', ['text' => '%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82']],
+//            ['/', true, '/encode/%5B%5D', 'Encode\True', ['text' => '%5B%5D']],
+            ['/', true, '/search/', 'Search', []],
+            
         ];
     }
 }

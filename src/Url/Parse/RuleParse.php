@@ -15,7 +15,7 @@ namespace Enjoys\Route\Url\Parse;
  *
  * @author Enjoys
  */
-class Rule extends Base implements \Enjoys\Route\Url\ParseInterface
+class RuleParse extends Base implements \Enjoys\Route\Url\ParseInterface
 {
 
     public function parse()
@@ -74,7 +74,7 @@ class Rule extends Base implements \Enjoys\Route\Url\ParseInterface
 
         $matches = $this->substitutePlaceholderNames($matches, $rule);
 
-      //  \Enjoys\dump($matches);
+ 
 
         foreach ($rule->defaults as $name => $value) {
             if (!isset($matches[$name]) || $matches[$name] === '') {
@@ -84,18 +84,20 @@ class Rule extends Base implements \Enjoys\Route\Url\ParseInterface
         $params = $rule->defaults;
         $tr = [];
         foreach ($matches as $name => $value) {
+            
             if (isset($rule->_routeParams[$name])) {
                 $tr[$rule->_routeParams[$name]] = $this->callback($value, $rule->_routeParams[$name], $rule);
                 unset($params[$name]);
             } elseif (isset($rule->_paramRules[$name])) {
+                //(($rule->encodeParams) ? urlencode((string) $value) : $value)
                 $params[$name] = $value;
             }
         }
-        
+
 
 
         if ($rule->_routeRule !== null) {
-            
+
             $route = strtr($rule->route, $tr);
         } else {
             $route = $rule->route;
@@ -104,23 +106,24 @@ class Rule extends Base implements \Enjoys\Route\Url\ParseInterface
         //_var_dump("Request parsed with URL rule: {$this->name}", __METHOD__);
 
         return [
+            'rule' => $rule->name,
             'route' => $route,
             'params' => $params
         ];
     }
-    
+
     protected function callback($value, $name, $rule)
     {
-        
 
-        if(empty($rule->callback) || !array_key_exists($name, $rule->callback)){
+
+        if (empty($rule->callback) || !array_key_exists($name, $rule->callback)) {
             return $value;
         }
-        
+
         foreach ((array) $rule->callback[$name] as $function) {
             $value = $function($value);
         }
-        
+
         return $value;
     }
 

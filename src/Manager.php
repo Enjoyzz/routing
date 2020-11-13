@@ -100,14 +100,7 @@ class Manager
      */
     public function getBaseUrl(): string
     {
-        if ($this->baseUrl === null) {
-//            $request = Request::getInstance();
-//            if ($request instanceof Request) {
-//                $this->_baseUrl = $request->getBaseUrl();
-//            } else {
-            throw new Exception\ManagerException('Please configure UrlManager::baseUrl correctly as you are running a console application.');
-            // }
-        }
+
         return $this->baseUrl;
     }
 

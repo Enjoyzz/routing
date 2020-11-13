@@ -17,8 +17,8 @@ namespace Enjoys\Route\Url;
  */
 class Create
 {
+    use \Enjoys\Route\Traits\Manager;
 
-    private \Enjoys\Route\Manager $manager;
     private string $route;
     private array $params;
 
@@ -36,11 +36,11 @@ class Create
     {
         $class = self::BASE_CLASS;
 
-        if ($this->manager->getOption('prettyUrl')) {
+        if ($this->getManager()->getOption('prettyUrl')) {
             $class = self::RULE_CLASS;
         }
 
-        return (new $class($this->route, $this->params, $this->manager))->returnUrl();
+        return (new $class($this->route, $this->params, $this->getManager()))->returnUrl();
     }
 
     public function createAbsoluteUrl(string $relativeUrl): string
@@ -49,15 +49,16 @@ class Create
             return $relativeUrl;
         }
 
-        $hostInfo = $this->manager->getHostInfo();
+        $hostInfo = $this->getManager()->getHostInfo();
         $url = $hostInfo . $relativeUrl;
-        
+
         if (strncmp($relativeUrl, '//', 2) === 0) {
-            $url = substr($hostInfo, 0, strpos($hostInfo, '://')) . ':' . $relativeUrl;
+            $pos = strpos($hostInfo, '://');
+            if ($pos !== false) {
+                $url = substr($hostInfo, 0, $pos) . ':' . $relativeUrl;
+            }
         }
 
         return $url;
     }
-
-
 }

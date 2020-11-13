@@ -17,8 +17,8 @@ namespace Enjoys\Route\Url\Create;
  */
 class BaseCreate implements \Enjoys\Route\Url\CreateInterface
 {
+    use \Enjoys\Route\Traits\Manager;
 
-    protected \Enjoys\Route\Manager $manager;
     protected string $route;
     protected array $params;
     protected string $anchor;
@@ -29,17 +29,12 @@ class BaseCreate implements \Enjoys\Route\Url\CreateInterface
         $this->manager = $manager;
         $this->route = $route;
         $this->params = $params;
-       
+
 
         $this->baseUrl = $this->getManager()->getBaseUrl();
         $this->anchor = isset($params['#']) ? '#' . $params['#'] : '';
 
         unset($this->params['#'], $this->params[$this->getManager()->getRouteParam()]);
-    }
-
-    public function getManager(): \Enjoys\Route\Manager
-    {
-        return $this->manager;
     }
 
     function returnUrl(): string

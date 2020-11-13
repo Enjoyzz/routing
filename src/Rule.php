@@ -20,9 +20,9 @@ class Rule
      */
     public const CREATION_ONLY = 2;
 
-    public ?string $name = null;
-    public ?string $route = null;
-    public ?string $pattern = null;
+    public string $name;
+    public string $route;
+    public string $pattern;
     public ?string $host = null;
     public array $defaults = [];
     public ?string $suffix = null;
@@ -41,22 +41,31 @@ class Rule
     public int $mode = self::DEFAULT_MODE;
 
     /**
-     * 
+
      * @param array $config
      * @throws Exception\ConfigRuleException
      */
     public function __construct(array $config)
     {
-        foreach ($config as $name => $value) {
-            $this->$name = $value;
+        if (!isset($config['pattern'])) {
+            throw new Exception\ConfigRuleException('Rule::pattern must be set.');
+        }
+        $this->pattern = $config['pattern'];
+
+        if (!isset($config['route'])) {
+            throw new Exception\ConfigRuleException('Rule::route must be set.');
+        }
+        $this->route = $config['route'];
+
+        if (isset($config['name'])) {
+            $this->name = $config['name'];
+        } else {
+            $this->name = $this->pattern;
         }
 
-        // dump($config);
-        if ($this->pattern === null) {
-            throw new Exception\ConfigRuleException('UrlRule::pattern must be set.');
-        }
-        if ($this->route === null) {
-            throw new Exception\ConfigRuleException('UrlRule::route must be set.');
+
+        foreach ($config as $name => $value) {
+            $this->$name = $value;
         }
 
         if ($this->verb !== null) {
@@ -65,9 +74,7 @@ class Rule
                 $this->verb[$i] = strtoupper($verb);
             }
         }
-        if ($this->name === null) {
-            $this->name = $this->pattern;
-        }
+
         $this->preparePattern();
 
         $this->translatePattern(true);
@@ -159,7 +166,7 @@ class Rule
                         $appendSlash = true;
                         $tr["<$name>/"] = "((?P<$placeholder>$pattern)/)?";
                     } elseif (
-                            $offset > 1 && $this->pattern[$offset - 1] === '/' &&
+                            $offset > 1 && (string) $this->pattern[$offset - 1] === '/' &&
                             (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')
                     ) {
                         $appendSlash = false;
@@ -205,7 +212,7 @@ class Rule
 
         $this->pattern = '#^' . trim(strtr($this->template, $tr), '/') . '$#u';
         // if host starts with relative scheme, then insert pattern to match any
-        if (strncmp($this->host, '//', 2) === 0) {
+        if (strncmp((string) $this->host, '//', 2) === 0) {
             $this->pattern = substr_replace($this->pattern, '[\w]+://', 2, 0);
         }
         if (!empty($this->routeParams)) {

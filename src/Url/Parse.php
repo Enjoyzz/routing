@@ -51,7 +51,7 @@ class Parse
      */
     public function getRoute()
     {
-        return $this->result['route'];
+        return (isset($this->result['route']))  ? $this->result['route'] : null;
     }
 
     /**
@@ -64,10 +64,11 @@ class Parse
 
     /**
      * 
-     * @return array
+     * @return  array<array-key, mixed>|null
      */
     public function getParams()
     {
-        return $this->result['params'];
+        
+        return (isset($this->result['params']))  ? $this->result['params'] : null;
     }
 }

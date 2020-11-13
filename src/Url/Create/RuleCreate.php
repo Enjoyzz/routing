@@ -90,8 +90,9 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
     {
 
         if ($rule->host !== null) {
-            $pos = strpos($url, '//', 0) + 1;
+            $pos = strpos($url, '//', 0);
             if ($pos !== false) {
+                $pos++;
                 $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
             }
         } elseif (strpos($url, '//') !== false) {

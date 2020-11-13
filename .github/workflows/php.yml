@@ -32,7 +32,10 @@ jobs:
       
     - name: Run test suite
       run: vendor/bin/phpunit tests
-
+      
+    - name: Run psalm
+      run: vendor/bin/psalm  --show-info=true
+      
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 

@@ -21,6 +21,13 @@ class URL
         return static::$urlManager;
     }
     
+    /**
+     * 
+     * @param string $route
+     * @param array $params
+     * @param bool|string $scheme
+     * @return string
+     */
     public static function toRoute(string $route, array $params, $scheme = false): string
     {
 

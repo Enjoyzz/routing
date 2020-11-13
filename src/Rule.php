@@ -21,9 +21,9 @@ class Rule
     public const CREATION_ONLY = 2;
 
     public ?string $name = null;
+    public ?string $route = null;
     public ?string $pattern = null;
     public ?string $host = null;
-    public ?string $route = null;
     public array $defaults = [];
     public ?string $suffix = null;
     public ?array $verb = null;
@@ -40,6 +40,11 @@ class Rule
     public array $callback = [];
     public int $mode = self::DEFAULT_MODE;
 
+    /**
+     * 
+     * @param array $config
+     * @throws Exception\ConfigRuleException
+     */
     public function __construct(array $config)
     {
         foreach ($config as $name => $value) {
@@ -55,12 +60,9 @@ class Rule
         }
 
         if ($this->verb !== null) {
-            if (is_array($this->verb)) {
-                foreach ($this->verb as $i => $verb) {
-                    $this->verb[$i] = strtoupper($verb);
-                }
-            } else {
-                $this->verb = [strtoupper($this->verb)];
+
+            foreach ($this->verb as $i => $verb) {
+                $this->verb[$i] = strtoupper($verb);
             }
         }
         if ($this->name === null) {

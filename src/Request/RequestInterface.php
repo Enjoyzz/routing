@@ -40,4 +40,6 @@ interface RequestInterface
      * @return mixed
      */
     public function get(string $key = null, $default = null);
+    
+    function addQuery(array $params): void;
 }

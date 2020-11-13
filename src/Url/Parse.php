@@ -42,10 +42,14 @@ class Parse
 
         $this->result = (new $class($request, $manager))->parse();
 
-        $request->query->add($this->result['params']);
+        $request->addQuery($this->result['params']);
     }
 
-    public function getRoute(): string
+    /**
+     * 
+     * @return mixed|null
+     */
+    public function getRoute()
     {
         return $this->result['route'];
     }

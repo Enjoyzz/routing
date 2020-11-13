@@ -14,6 +14,8 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
 
     public function returnUrl(): string
     {
+        $url = false;
+        
         foreach ($this->getManager()->getRules() as $rule) {
             $url = $this->create($rule);
             if ($url !== false) {
@@ -84,7 +86,7 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
         return $url;
     }
 
-    private function buildUrl($url, \Enjoys\Route\Rule $rule): string
+    private function buildUrl(string $url, \Enjoys\Route\Rule $rule): string
     {
 
         if ($rule->host !== null) {
@@ -97,7 +99,7 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
         }
         if ($url !== '') {
 
-            $url .= ($rule->suffix === null ? $this->getManager()->getSuffix() : $rule->suffix);
+            $url .= (($rule->suffix === null) ? $this->getManager()->getSuffix() : $rule->suffix);
         }
         if (!empty($this->params) && ($query = http_build_query($this->params)) !== '') {
 

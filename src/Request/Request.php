@@ -29,4 +29,10 @@ class Request extends \Symfony\Component\HttpFoundation\Request implements Reque
         }
         return parent::get($key, $default);
     }
+    
+    
+    public function addQuery(array $params): void
+    {
+        $this->query->add($params);
+    }
 }

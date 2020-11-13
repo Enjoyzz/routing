@@ -17,13 +17,27 @@ namespace Enjoys\Route\Request;
  */
 interface RequestInterface
 {
+
+    /**
+     * @return string The raw path (i.e. not urldecoded)
+     */
     public function getPathInfo();
+
+    /**
+     * @return string The request method
+     */
     public function getMethod();
+
+    /**
+     * @return string
+     */
     public function getHost();
+
     /**
      * 
      * @param string|null $key
      * @param mixed $default
+     * @return mixed
      */
     public function get(string $key = null, $default = null);
 }

@@ -21,6 +21,10 @@ class Parse
 //    private \Enjoys\Route\Manager $manager;
 //    private \Enjoys\Route\Request\RequestInterface $request;
 
+    /**
+     *
+     * @var null|array<array-key, mixed>
+     */
     private ?array $result = null;
 
     private const BASE_CLASS = Parse\BaseParse::class;
@@ -41,16 +45,23 @@ class Parse
         $request->query->add($this->result['params']);
     }
 
-    public function getRoute()
+    public function getRoute(): string
     {
         return $this->result['route'];
     }
 
-    public function getResult()
+    /**
+     * @return array|null
+     */
+    public function getResult(): ?array
     {
         return $this->result;
     }
 
+    /**
+     * 
+     * @return array
+     */
     public function getParams()
     {
         return $this->result['params'];

@@ -8,17 +8,17 @@ class Rule
     /**
      * Set [[mode]] with this value to mark that this rule is for URL parsing and creation.
      */
-    const DEFAULT_MODE = 0;
+    public const DEFAULT_MODE = 0;
 
     /**
      * Set [[mode]] with this value to mark that this rule is for URL parsing only.
      */
-    const PARSING_ONLY = 1;
+    public const PARSING_ONLY = 1;
 
     /**
      * Set [[mode]] with this value to mark that this rule is for URL creation only.
      */
-    const CREATION_ONLY = 2;
+    public const CREATION_ONLY = 2;
 
     public ?string $name = null;
     public ?string $pattern = null;
@@ -26,14 +26,10 @@ class Rule
     public ?string $route = null;
     public array $defaults = [];
     public ?string $suffix = null;
-
-    /**
-     * @var string|non-empty-array<array-key, mixed>|null
-     */
-    public $verb = null;
+    public ?array $verb = null;
     public bool $encodeParams = true;
     public array $placeholders = [];
-    public string $template;
+    public string $template = '';
     public ?string $ruleRoute = null;
     public array $ruleParams = [];
 
@@ -44,7 +40,7 @@ class Rule
     public array $callback = [];
     public int $mode = self::DEFAULT_MODE;
 
-    public function __construct($config)
+    public function __construct(array $config)
     {
         foreach ($config as $name => $value) {
             $this->$name = $value;
@@ -78,7 +74,7 @@ class Rule
     /**
      * Process [[$pattern]] on rule initialization.
      */
-    private function preparePattern()
+    private function preparePattern(): void
     {
         $this->pattern = \Enjoys\Route\Helpers::trimSlashes($this->pattern);
         $this->route = trim($this->route, '/');
@@ -120,7 +116,7 @@ class Rule
      * If `false` slash will be placed at the beginning of param pattern. If `true` slash position will be detected
      * depending on non-optional pattern part.
      */
-    private function translatePattern($allowAppendSlash)
+    private function translatePattern($allowAppendSlash): void
     {
         $tr = [
             '.' => '\\.',
@@ -215,28 +211,12 @@ class Rule
         }
     }
 
-    /**
-     * Returns list of regex for matching parameter.
-     * @return array parameter keys and regexp rules.
-     *
-     * @since 2.0.6
-     */
-    protected function getParamRules()
+    protected function getParamRules(): array
     {
         return $this->ruleParams;
     }
 
-    /**
-     * Iterates over [[placeholders]] and checks whether each placeholder exists as a key in $matches array.
-     * When found - replaces this placeholder key with a appropriate name of matching parameter.
-     * Used in [[parseRequest()]], [[createUrl()]].
-     *
-     * @param array $matches result of `preg_match()` call
-     * @return array input array with replaced placeholder keys
-     * @see placeholders
-     * @since 2.0.7
-     */
-    protected function substitutePlaceholderNames(array $matches)
+    protected function substitutePlaceholderNames(array $matches): array
     {
         foreach ($this->placeholders as $placeholder => $name) {
             if (isset($matches[$placeholder])) {

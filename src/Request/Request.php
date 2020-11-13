@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace Enjoys\Route\Request;
 
 /**
- * Class Request
- *
+ * @psalm-suppress PropertyNotSetInConstructor 
  * @author Enjoys
  */
 class Request extends \Symfony\Component\HttpFoundation\Request implements RequestInterface

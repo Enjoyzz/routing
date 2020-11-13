@@ -13,7 +13,7 @@ class URL
    
     
   
-    public static function setUrlmanager(Manager $urlManager) {
+    public static function setUrlmanager(Manager $urlManager): void {
         static::$urlManager = $urlManager;
     }
     
@@ -21,7 +21,7 @@ class URL
         return static::$urlManager;
     }
     
-    public static function toRoute(string $route, array $params, $scheme = false)
+    public static function toRoute(string $route, array $params, $scheme = false): string
     {
 
        
@@ -38,6 +38,12 @@ class URL
 
 
 
+    /**
+     * 
+     * @param string|array $url
+     * @param bool|string $scheme
+     * @return string
+     */
     public static function make($url = '', $scheme = false){
         if (is_array($url)) {
             $params = $url;

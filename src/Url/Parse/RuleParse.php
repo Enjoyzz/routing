@@ -133,7 +133,7 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
         return $value;
     }
 
-    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule)
+    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule): array
     {
         foreach ($rule->placeholders as $placeholder => $name) {
             if (isset($matches[$placeholder])) {

@@ -32,7 +32,7 @@ class Create
         $this->params = $params;
     }
 
-    public function returnUrl()
+    public function returnUrl(): string
     {
         $class = self::BASE_CLASS;
 

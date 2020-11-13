@@ -155,10 +155,10 @@ class Manager
 
     /**
      * 
-     * @return string|null
+     * @return string
      * @throws Exception\ManagerException
      */
-    public function getHostInfo(): ?string
+    public function getHostInfo(): string
     {
         if ($this->hostInfo === null) {
             throw new Exception\ManagerException('Please configure UrlManager::hostInfo correctly as you are running a console application.');
@@ -172,6 +172,6 @@ class Manager
      */
     public function setHostInfo(string $value): void
     {
-        $this->hostInfo = $value === null ? null : rtrim($value, '/');
+        $this->hostInfo = rtrim($value, '/');
     }
 }

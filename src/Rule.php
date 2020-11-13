@@ -6,6 +6,11 @@ class Rule
 {
 
     /**
+     * Set [[mode]] with this value to mark that this rule is for URL parsing and creation.
+     */
+    const DEFAULT_MODE = 0;
+
+    /**
      * Set [[mode]] with this value to mark that this rule is for URL parsing only.
      */
     const PARSING_ONLY = 1;
@@ -15,154 +20,42 @@ class Rule
      */
     const CREATION_ONLY = 2;
 
-    /**
-     * Represents the successful URL generation by last [[createUrl()]] call.
-     * @see $createStatus
-     * @since 2.0.12
-     */
-    const CREATE_STATUS_SUCCESS = 0;
+    public ?string $name = null;
+    public ?string $pattern = null;
+    public ?string $host = null;
+    public ?string $route = null;
+    public array $defaults = [];
+    public ?string $suffix = null;
 
     /**
-     * Represents the unsuccessful URL generation by last [[createUrl()]] call, because rule does not support
-     * creating URLs.
-     * @see $createStatus
-     * @since 2.0.12
+     * @var string|non-empty-array<array-key, mixed>|null
      */
-    const CREATE_STATUS_PARSING_ONLY = 1;
-
-    /**
-     * Represents the unsuccessful URL generation by last [[createUrl()]] call, because of mismatched route.
-     * @see $createStatus
-     * @since 2.0.12
-     */
-    const CREATE_STATUS_ROUTE_MISMATCH = 2;
-
-    /**
-     * Represents the unsuccessful URL generation by last [[createUrl()]] call, because of mismatched
-     * or missing parameters.
-     * @see $createStatus
-     * @since 2.0.12
-     */
-    const CREATE_STATUS_PARAMS_MISMATCH = 4;
-
-    /**
-     * @var string the name of this rule. If not set, it will use [[pattern]] as the name.
-     */
-    public $name;
-
-    /**
-     * On the rule initialization, the [[pattern]] matching parameters names will be replaced with [[placeholders]].
-     * @var string the pattern used to parse and create the path info part of a URL.
-     * @see host
-     * @see placeholders
-     */
-    public $pattern;
-
-    /**
-     * @var string the pattern used to parse and create the host info part of a URL (e.g. `http://example.com`).
-     * @see pattern
-     */
-    public $host;
-
-    /**
-     * @var string the route to the controller action
-     */
-    public $route;
-
-    /**
-     * @var array the default GET parameters (name => value) that this rule provides.
-     * When this rule is used to parse the incoming request, the values declared in this property
-     * will be injected into $_GET.
-     */
-    public $defaults = [];
-
-    /**
-     * @var string the URL suffix used for this rule.
-     * For example, ".html" can be used so that the URL looks like pointing to a static HTML page.
-     * If not set, the value of [[UrlManager::suffix]] will be used.
-     */
-    public $suffix = '';
-
-    /**
-     * @var string|array the HTTP verb (e.g. GET, POST, DELETE) that this rule should match.
-     * Use array to represent multiple verbs that this rule may match.
-     * If this property is not set, the rule can match any verb.
-     * Note that this property is only used when parsing a request. It is ignored for URL creation.
-     */
-    public $verb;
-
-    /**
-     * @var int a value indicating if this rule should be used for both request parsing and URL creation,
-     * parsing only, or creation only.
-     * If not set or 0, it means the rule is both request parsing and URL creation.
-     * If it is [[PARSING_ONLY]], the rule is for request parsing only.
-     * If it is [[CREATION_ONLY]], the rule is for URL creation only.
-     */
-    public $mode;
-
-    /**
-     * @var bool a value indicating if parameters should be url encoded.
-     */
-    public $encodeParams = true;
-
-    /**
-     * @var UrlNormalizer|array|false|null the configuration for [[UrlNormalizer]] used by this rule.
-     * If `null`, [[UrlManager::normalizer]] will be used, if `false`, normalization will be skipped
-     * for this rule.
-     * @since 2.0.10
-     */
-    public $normalizer;
-
-    /**
-     * @var int|null status of the URL creation after the last [[createUrl()]] call.
-     * @since 2.0.12
-     */
-    protected $createStatus;
-
-    /**
-     * @var array list of placeholders for matching parameters names. Used in [[parseRequest()]], [[createUrl()]].
-     * On the rule initialization, the [[pattern]] parameters names will be replaced with placeholders.
-     * This array contains relations between the original parameters names and their placeholders.
-     * The array keys are the placeholders and the values are the original names.
-     *
-     * @see parseRequest()
-     * @see createUrl()
-     * @since 2.0.7
-     */
-    public $placeholders = [];
-
-    /**
-     * @var string the template for generating a new URL. This is derived from [[pattern]] and is used in generating URL.
-     */
-    public $_template;
-
-    /**
-     * @var string the regex for matching the route part. This is used in generating URL.
-     */
-    public $_routeRule;
-
-    /**
-     * @var array list of regex for matching parameters. This is used in generating URL.
-     */
-    public $_paramRules = [];
+    public $verb = null;
+    public bool $encodeParams = true;
+    public array $placeholders = [];
+    public string $template;
+    public ?string $ruleRoute = null;
+    public array $ruleParams = [];
 
     /**
      * @var array list of parameters used in the route.
      */
-    public $_routeParams = [];
+    public array $routeParams = [];
+    public array $callback = [];
+    public int $mode = self::DEFAULT_MODE;
 
     public function __construct($config)
     {
         foreach ($config as $name => $value) {
             $this->$name = $value;
         }
-     
+
         // dump($config);
         if ($this->pattern === null) {
-            throw new ConfigRuleException('UrlRule::pattern must be set.');
+            throw new Exception\ConfigRuleException('UrlRule::pattern must be set.');
         }
         if ($this->route === null) {
-            throw new ConfigRuleException('UrlRule::route must be set.');
+            throw new Exception\ConfigRuleException('UrlRule::route must be set.');
         }
 
         if ($this->verb !== null) {
@@ -178,7 +71,7 @@ class Rule
             $this->name = $this->pattern;
         }
         $this->preparePattern();
-       
+
         $this->translatePattern(true);
     }
 
@@ -211,16 +104,13 @@ class Rule
         } else {
             $this->pattern = '/' . $this->pattern . '/';
         }
-       // \Enjoys\dump( $this->pattern);
+        // \Enjoys\dump( $this->pattern);
 //
         if (strpos($this->route, '<') !== false && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
             foreach ($matches[1] as $name) {
-                $this->_routeParams[$name] = "<$name>";
+                $this->routeParams[$name] = "<$name>";
             }
         }
-        
-       
-       
     }
 
     /**
@@ -245,7 +135,7 @@ class Rule
         $requiredPatternPart = $this->pattern;
         $oldOffset = 0;
 
-       
+
         if (preg_match_all('/<([\w._-]+):?([^>]+)?>/', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 
             $appendSlash = false;
@@ -271,7 +161,7 @@ class Rule
                         $appendSlash = true;
                         $tr["<$name>/"] = "((?P<$placeholder>$pattern)/)?";
                     } elseif (
-                            $offset > 1 && $this->pattern[$offset - 1] === '/' && 
+                            $offset > 1 && $this->pattern[$offset - 1] === '/' &&
                             (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')
                     ) {
                         $appendSlash = false;
@@ -287,9 +177,9 @@ class Rule
 
                 /* enjoys */
 
-                $this->_paramRules[$name] = $pattern === '[^\/]+' ? '' : "#^$pattern$#u";
-     
-                if (isset($this->_routeParams[$name])) {
+                $this->ruleParams[$name] = $pattern === '[^\/]+' ? '' : "#^$pattern$#u";
+
+                if (isset($this->routeParams[$name])) {
                     $tr2["<$name>"] = "(?P<$placeholder>$pattern)";
                 }
 
@@ -308,24 +198,23 @@ class Rule
             $this->translatePattern(false);
             return;
         }
-       
-        
-        
-        $this->_template = preg_replace('/<([\w._-]+):?([^>]+)?>/', '<$1>', $this->pattern);
-        
-         
-         
-        $this->pattern = '#^' . trim(strtr($this->_template, $tr), '/') . '$#u';
+
+
+
+        $this->template = preg_replace('/<([\w._-]+):?([^>]+)?>/', '<$1>', $this->pattern);
+
+
+
+        $this->pattern = '#^' . trim(strtr($this->template, $tr), '/') . '$#u';
         // if host starts with relative scheme, then insert pattern to match any
         if (strncmp($this->host, '//', 2) === 0) {
             $this->pattern = substr_replace($this->pattern, '[\w]+://', 2, 0);
         }
-        if (!empty($this->_routeParams)) {
-            $this->_routeRule = '#^' . strtr($this->route, $tr2) . '$#u';
+        if (!empty($this->routeParams)) {
+            $this->ruleRoute = '#^' . strtr($this->route, $tr2) . '$#u';
         }
     }
 
-   
     /**
      * Returns list of regex for matching parameter.
      * @return array parameter keys and regexp rules.
@@ -334,7 +223,7 @@ class Rule
      */
     protected function getParamRules()
     {
-        return $this->_paramRules;
+        return $this->ruleParams;
     }
 
     /**
@@ -357,6 +246,4 @@ class Rule
         }
         return $matches;
     }
-
-
 }

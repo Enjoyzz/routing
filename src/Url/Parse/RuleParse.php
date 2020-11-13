@@ -18,7 +18,7 @@ namespace Enjoys\Route\Url\Parse;
 class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
 {
 
-    public function parse()
+    public function parse(): array
     {
         foreach ($this->getManager()->getRules() as $rule) {
 
@@ -29,24 +29,29 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
             }
         }
 
-        if ($this->getManager()->getOption('enableStrictParsing')) {
-            return false;
-        }
+//        if ($this->getManager()->getOption('enableStrictParsing')) {
+//            return false;
+//        }
 
         return parent::parse();
     }
 
+    /**
+     * 
+     * @param \Enjoys\Route\Rule $rule
+     * @return false|array{rule: string|null, route: string|null, params: array<array-key, mixed>}
+     */
     private function parseRequest(\Enjoys\Route\Rule $rule)
     {
-//        if ($this->mode === self::CREATION_ONLY) {
-//            return false;
-//        }
-//\Enjoys\dump($rule);
+        if ($rule->mode === \Enjoys\Route\Rule::CREATION_ONLY) {
+            return false;
+        }
+
         if (!empty($rule->verb) && !in_array($this->getRequest()->getMethod(), $rule->verb, true)) {
             return false;
         }
 
-        $suffix = (string) ($rule->suffix === null ? $this->getManager()->suffix : $rule->suffix);
+        $suffix = (string) (($rule->suffix === null) ? $this->getManager()->getSuffix() : $rule->suffix);
 
         $pathInfo = ltrim($this->getRequest()->getPathInfo(), '/');
 
@@ -72,6 +77,7 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
             return false;
         }
 
+     
         $matches = $this->substitutePlaceholderNames($matches, $rule);
 
  
@@ -85,10 +91,10 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
         $tr = [];
         foreach ($matches as $name => $value) {
             
-            if (isset($rule->_routeParams[$name])) {
-                $tr[$rule->_routeParams[$name]] = $this->callback($value, $rule->_routeParams[$name], $rule);
+            if (isset($rule->routeParams[$name])) {
+                $tr[$rule->routeParams[$name]] = $this->callback($value, $rule->routeParams[$name], $rule);
                 unset($params[$name]);
-            } elseif (isset($rule->_paramRules[$name])) {
+            } elseif (isset($rule->ruleParams[$name])) {
                 //(($rule->encodeParams) ? urlencode((string) $value) : $value)
                 $params[$name] = $value;
             }
@@ -96,7 +102,7 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
 
 
 
-        if ($rule->_routeRule !== null) {
+        if ($rule->ruleRoute !== null) {
 
             $route = strtr($rule->route, $tr);
         } else {
@@ -112,11 +118,11 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
         ];
     }
 
-    protected function callback($value, $name, $rule)
+    protected function callback(string $value, string $name, \Enjoys\Route\Rule $rule): string
     {
 
 
-        if (empty($rule->callback) || !array_key_exists($name, $rule->callback)) {
+        if (!array_key_exists($name, $rule->callback)) {
             return $value;
         }
 

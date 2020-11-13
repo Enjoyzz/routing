@@ -18,4 +18,12 @@ namespace Enjoys\Route\Request;
 interface RequestInterface
 {
     public function getPathInfo();
+    public function getMethod();
+    public function getHost();
+    /**
+     * 
+     * @param string|null $key
+     * @param mixed $default
+     */
+    public function get(string $key = null, $default = null);
 }

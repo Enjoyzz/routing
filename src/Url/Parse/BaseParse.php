@@ -27,21 +27,23 @@ class BaseParse implements \Enjoys\Route\Url\ParseInterface
         $this->request = $request;
     }
 
-    public function getManager()
+    public function getManager(): \Enjoys\Route\Manager
     {
         return $this->manager;
     }
 
-    public function getRequest()
+    public function getRequest(): \Enjoys\Route\Request\RequestInterface
     {
         return $this->request;
     }
 
-    public function parse()
+    public function parse(): array
     {
         $routeParam = $this->getManager()->getRouteParam();
-        $route = $this->request->get($routeParam, $this->request->getPathInfo());
-        $params = $this->request->query->all();
+        
+        $route = $this->getRequest()->get($routeParam, $this->getRequest()->getPathInfo());
+        $params = $this->getRequest()->get();
+        
         unset($params[$routeParam]);
         return ['route' => $route, 'params' => $params];
     }

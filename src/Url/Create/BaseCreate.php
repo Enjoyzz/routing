@@ -37,7 +37,7 @@ class BaseCreate implements \Enjoys\Route\Url\CreateInterface
         unset($this->params['#'], $this->params[$this->getManager()->getRouteParam()]);
     }
 
-    public function getManager()
+    public function getManager(): \Enjoys\Route\Manager
     {
         return $this->manager;
     }

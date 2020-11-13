@@ -17,5 +17,17 @@ namespace Enjoys\Route\Request;
  */
 class Request extends \Symfony\Component\HttpFoundation\Request implements RequestInterface
 {
- 
+    /**
+     * 
+     * @param string|null $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function get(?string $key = null, $default = null)
+    {
+        if($key === null){
+            return $this->query->all();
+        }
+        return parent::get($key, $default);
+    }
 }

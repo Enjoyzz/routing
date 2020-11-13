@@ -6,13 +6,16 @@
  * and open the template in the editor.
  */
 
-namespace Enjoys\Route\Url;
+declare(strict_types=1);
+
+namespace Enjoys\Route\Exception;
 
 /**
+ * Class ConfigRuleException
  *
  * @author Enjoys
  */
-interface ParseInterface
+class ConfigRuleException extends \Exception
 {
-    public function parse(): array;
+    //put your code here
 }

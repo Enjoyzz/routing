@@ -35,13 +35,16 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
      */
     private function create(\Enjoys\Route\Rule $rule)
     {
+        
+        if ($rule->mode === \Enjoys\Route\Rule::PARSING_ONLY) {
+            return false;
+        }
+        
         $translate = [];
 
         if ($this->route !== $rule->route) {
             return false;
         }
-
-
 
         // match default params
         foreach ($rule->defaults as $name => $value) {
@@ -50,7 +53,7 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
 
         // match params in the pattern
 
-        foreach ($rule->_paramRules as $name => $_rule) {
+        foreach ($rule->ruleParams as $name => $_rule) {
           
             if (
                     array_key_exists($name, $this->params) &&
@@ -72,7 +75,7 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
 
 
 
-        $url = $this->buildUrl(\Enjoys\Route\Helpers::trimSlashes(strtr($rule->_template, $translate)), $rule);
+        $url = $this->buildUrl(\Enjoys\Route\Helpers::trimSlashes(strtr($rule->template, $translate)), $rule);
 
         if ($rule->host === null) {
             return $this->baseUrl . $url;
@@ -94,7 +97,7 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
         }
         if ($url !== '') {
 
-            $url .= ($rule->suffix === null ? $manager->suffix : $rule->suffix);
+            $url .= ($rule->suffix === null ? $this->getManager()->getSuffix() : $rule->suffix);
         }
         if (!empty($this->params) && ($query = http_build_query($this->params)) !== '') {
 

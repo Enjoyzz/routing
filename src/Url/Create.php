@@ -45,7 +45,7 @@ class Create
 
     public function createAbsoluteUrl(string $relativeUrl): string
     {
-        if (!$this->isRelative($relativeUrl)) {
+        if (!\Enjoys\Route\Helpers::isRelative($relativeUrl)) {
             return $relativeUrl;
         }
 
@@ -59,8 +59,5 @@ class Create
         return $url;
     }
 
-    private function isRelative(string $url): bool
-    {
-        return strncmp($url, '//', 2) && strpos($url, '://') === false;
-    }
+
 }

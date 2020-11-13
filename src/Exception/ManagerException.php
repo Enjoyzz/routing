@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace Enjoys\Route;
+namespace Enjoys\Route\Exception;
 
 /**
- * Class ConfigRuleException
+ * Class ManagerException
  *
  * @author Enjoys
  */
-class ConfigRuleException extends \Exception
+class ManagerException extends \Exception
 {
     //put your code here
 }

@@ -26,12 +26,18 @@ class Helpers
         return trim($string, '/');
     }
 
-    public static function isRelative($url)
+    public static function isRelative(string $url): bool
     {
         return strncmp($url, '//', 2) && strpos($url, '://') === false;
     }
 
-    public static function ensureScheme($url, $scheme)
+    /**
+     * 
+     * @param string $url
+     * @param string|bool $scheme
+     * @return string
+     */
+    public static function ensureScheme(string $url, $scheme)
     {
         if (self::isRelative($url) || !is_string($scheme)) {
             return $url;

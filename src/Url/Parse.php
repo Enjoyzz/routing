@@ -23,7 +23,7 @@ class Parse
 
     private ?array $result = null;
 
-    private const BASE_CLASS = Parse\Base::class;
+    private const BASE_CLASS = Parse\BaseParse::class;
     private const RULE_CLASS = Parse\RuleParse::class;
 
     public function __construct(\Enjoys\Route\Request\RequestInterface $request, \Enjoys\Route\Manager $manager)

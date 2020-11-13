@@ -15,7 +15,7 @@ namespace Enjoys\Route\Url\Parse;
  *
  * @author Enjoys
  */
-class Base implements \Enjoys\Route\Url\ParseInterface
+class BaseParse implements \Enjoys\Route\Url\ParseInterface
 {
 
     protected \Enjoys\Route\Manager $manager;

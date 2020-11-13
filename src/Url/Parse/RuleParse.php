@@ -15,7 +15,7 @@ namespace Enjoys\Route\Url\Parse;
  *
  * @author Enjoys
  */
-class RuleParse extends Base implements \Enjoys\Route\Url\ParseInterface
+class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
 {
 
     public function parse()

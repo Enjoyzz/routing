@@ -137,12 +137,13 @@ class URLTest extends \PHPUnit\Framework\TestCase
     public function data_test_4()
     {
         return [
-            ['/', true, ['post\view', 'id' => 1], false, '/post/1/'],
-            ['/', true, ['comment\view', 'id' => 1], false, '/comment/1/'],
-            ['/', true, ['comment\view5'], false, '/comment/view5/55/'],
-            ['/', true, ['comment\view5'], false, '/comment/view5/55/'],
-            ['/', true, ['\Song\<action>', 'action' => 'A', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@A_1'],
-            ['/', true, ['\Song\<action>', 'action' => 'AbC', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@AbC_1'],
+            ['/', true, ['<controller>\view', 'controller' => 'post', 'id' => 1], false, '/post/1/'],
+            ['/', true, ['<controller>\view', 'controller' => 'comment', 'id' => 1], false, '/comment/1/'],
+            ['/', true, ['<class>\<action>', 'class' => 'comment', 'action' => 'view5'], false, '/comment/view5/55/'],
+            ['/', true, ['<class>\<action>', 'class' => 'comment', 'action' => 'view5'], false, '/comment/view5/55/'],
+            // ['/', true, ['\Song\<action>', 'action' => 'A', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@A_1'],
+            // ['/', true, ['\Song\<action>', 'action' => 'AbC', 'band' => 'B', 'song' => 'S', 'data_id' => 1], false, '/B/S.html@AbC_1'],
+            ['/', true, ['\chords\Core\Song\<act>', 'act' => 'aBC', 'band' => 'B', 'song' => 'S', 'id' => 1], false, '/B/S@aBC_1.php'],
         ];
     }
 }

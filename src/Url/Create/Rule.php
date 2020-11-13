@@ -44,29 +44,7 @@ class Rule extends Base implements \Enjoys\Route\Url\CreateInterface
         $translate = [];
 
         if ($this->route !== $rule->route) {
-
-
-//\Enjoys\_var_dump($this->route, $rule->_routeRule);
-
-            if ($rule->_routeRule !== null && preg_match($rule->_routeRule, $this->route, $matches)) {
-
-
-                $matches = $this->substitutePlaceholderNames($matches, $rule);
-  
-                foreach ($rule->_routeParams as $name => $token) {
-                 
-                
-                    if (isset($rule->defaults[$name]) && strcmp((string) $rule->defaults[$name], $matches[$name]) === 0) {
-                        $translate[$token] = '';
-                    } else {
-                        $translate[$token] = $matches[$name];
-                        unset($rule->_paramRules[$name], $rule->defaults[$name]);
-                    }
-                }
-               
-            } else {
-                return false;
-            }
+            return false;
         }
 
 

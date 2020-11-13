@@ -3,12 +3,12 @@
 return [
     [
         'pattern' => '<controller:(post|comment)>/<id:\d+>',
-        'route' => '<controller>\\\view',
+        'route' => '<controller>\view',
         'suffix' => '/',
     ],
     [
         'pattern' => '<class:(post|comment)>/<action:.+>/<id:\d+>',
-        'route' => '<class>\\\<action>',
+        'route' => '<class>\<action>',
         'suffix' => '/',
         'defaults' => [
             'class' => 'post',
@@ -16,7 +16,6 @@ return [
         ]
     ],
     [
-        'name' => 'song - vlessons',
         'pattern' => '<band>/<song>.html@<action>_<data_id:\d+>',
         'route' => '\Song\<action>',
         'callback' => [
@@ -27,6 +26,20 @@ return [
         ],
         'suffix' => '',
     ],
+    [
+         'pattern' => '<band>/<song>@<act>_<id:\d+>',
+        'route' => '\chords\Core\Song\<act>',
+        'verb' => [
+            'POST',
+            'GET'
+        ],
+        'callback' => [
+            '<act>' => [
+                'ucfirst'
+            ]
+        ],
+        'suffix' => '.php',
+    ],    
     [
    
         'pattern' => 'admin/<controller>/<module>/<action>',

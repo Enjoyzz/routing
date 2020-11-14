@@ -15,7 +15,6 @@ class Manager
      */
     private string $suffix = '';
     private string $baseUrl = '/';
-    private ?string $scriptUrl = null;
     private ?string $hostInfo = null;
 
     /**
@@ -120,27 +119,7 @@ class Manager
         $this->baseUrl = $value;
     }
 
-    /**
-     *
-     * @return string
-     * @throws Exception\ManagerException
-     */
-    public function getScriptUrl(): string
-    {
-        if ($this->scriptUrl === null) {
-            throw new Exception\ManagerException('Please configure UrlManager::scriptUrl correctly as you are running a console application.');
-        }
-        return $this->scriptUrl;
-    }
 
-    /**
-     *
-     * @param string $value
-     */
-    public function setScriptUrl(string $value): void
-    {
-        $this->scriptUrl = $value;
-    }
 
     /**
      *

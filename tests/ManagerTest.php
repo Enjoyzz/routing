@@ -17,8 +17,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $manager = new \Enjoys\Route\Manager();
         $manager->setSuffix('.html');
         $this->assertSame('.html', $manager->getSuffix());
-        $manager->setScriptUrl('index.php');
-        $this->assertSame('index.php', $manager->getScriptUrl());
+//        $manager->setScriptUrl('index.php');
+//        $this->assertSame('index.php', $manager->getScriptUrl());
     }
 
     public function test_getHostInfo()
@@ -27,13 +27,13 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $manager = new \Enjoys\Route\Manager();
         $manager->getHostInfo();
     }
-
-    public function test_getScriptUrl()
-    {
-        $this->expectException(\Enjoys\Route\Exception\ManagerException::class);
-        $manager = new \Enjoys\Route\Manager();
-        $manager->getScriptUrl();
-    }
+//
+//    public function test_getScriptUrl()
+//    {
+//        $this->expectException(\Enjoys\Route\Exception\ManagerException::class);
+//        $manager = new \Enjoys\Route\Manager();
+//        $manager->getScriptUrl();
+//    }
 
     public function test_addRules()
     {

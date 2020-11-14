@@ -43,7 +43,7 @@ class Create
         return (new $class($this->route, $this->params, $this->getManager()))->returnUrl();
     }
 
-    public function createAbsoluteUrl(string $relativeUrl): string
+    public function createAbsoluteUrl(string $relativeUrl, $scheme = true): string
     {
         if (!\Enjoys\Route\Helpers::isRelative($relativeUrl)) {
             return $relativeUrl;
@@ -59,6 +59,6 @@ class Create
             }
         }
 
-        return $url;
+        return \Enjoys\Route\Helpers::ensureScheme($url, $scheme);
     }
 }

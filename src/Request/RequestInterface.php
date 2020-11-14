@@ -31,7 +31,7 @@ interface RequestInterface
     /**
      * @return string
      */
-    public function getHost();
+    public function getHostInfo();
 
     /**
      *

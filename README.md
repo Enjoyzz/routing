@@ -40,6 +40,6 @@ $manager->addRules([
 \Enjoys\Route\URL::setUrlmanager($manager);
 
 
-\Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Signin', 'id' => 5], true)); //return localhost/sub/login.html?id=5
-\Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Test'], true)); //return localhost/sub/test.something
+\Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Signin', 'id' => 5], true)); //return http://localhost/sub/login.html?id=5
+\Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Test'], true)); //return http://localhost/sub/test.something
 \Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Index'], false)); //return /sub/

@@ -37,8 +37,8 @@ class URL
 
         $url = $createUrl->returnUrl();
 
-        if ($scheme === true) {
-            $url = $createUrl->createAbsoluteUrl($url);
+        if ($scheme !== false) {
+            $url = $createUrl->createAbsoluteUrl($url, $scheme);
         }
         return $url;
     }

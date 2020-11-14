@@ -16,6 +16,7 @@ namespace Enjoys\Route\Request;
  */
 class Request extends \Symfony\Component\HttpFoundation\Request implements RequestInterface
 {
+
     /**
      *
      * @param  string|null $key
@@ -30,9 +31,13 @@ class Request extends \Symfony\Component\HttpFoundation\Request implements Reque
         return parent::get($key, $default);
     }
 
-
     public function addQuery(array $params): void
     {
         $this->query->add($params);
+    }
+
+    public function getHostInfo()
+    {
+        return parent::getSchemeAndHttpHost();
     }
 }

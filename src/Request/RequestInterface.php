@@ -41,5 +41,5 @@ interface RequestInterface
      */
     public function get(string $key = null, $default = null);
 
-    function addQuery(array $params): void;
+    public function addQuery(array $params): void;
 }

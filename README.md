@@ -3,6 +3,7 @@
 ![php 8.0](https://github.com/Enjoyzz/routing/workflows/php%208.0/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Enjoyzz/routing/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Enjoyzz/routing/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Enjoyzz/routing/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Enjoyzz/routing/?branch=master)
+
 # make
 ```php
 include __DIR__ . "/vendor/autoload.php";
@@ -11,7 +12,7 @@ $request = \Enjoys\Route\Request\Request::createFromGlobals();
 
 $manager = new Enjoys\Route\Manager([
     'baseUrl' => '/sub/',
-    'hostInfo' => $request->getHost(),
+    'hostInfo' => $request->getHostInfo(),
     'prettyUrl' => true, //or false - default,
     'suffix' => '.html' //work in prettyUrl==true
 ]);
@@ -20,7 +21,7 @@ $manager = new Enjoys\Route\Manager([
 //also
 //$manager->setBaseUrl('/sub/');
 //also
-//$manager->setHostInfo($request->getHost());
+//$manager->setHostInfo($request->getHostInfo());
 
 $manager->addRules([
     [
@@ -44,9 +45,11 @@ $manager->addRules([
 \Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Signin', 'id' => 5], true)); //return http://localhost/sub/login.html?id=5
 \Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Test'], true)); //return http://localhost/sub/test.something
 \Enjoys\dump(\Enjoys\Route\URL::make(['\Core\\Index'], false)); //return /sub/
+```
 
 # parse
-```apache
+
+```config
 RewriteEngine On 
 RewriteBase /
 
@@ -54,6 +57,7 @@ RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php [L]
+```
 
 ```php
 $parser = new \Enjoys\Route\Url\Parse($request, $manager);

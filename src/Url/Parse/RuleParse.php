@@ -69,7 +69,7 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
             }
         }
         if ($rule->host !== null) {
-            $pathInfo = ltrim(strtolower($this->getRequest()->getHost()) . ($pathInfo === '' ? '' : '/' . $pathInfo), '/');
+            $pathInfo = ltrim(strtolower($this->getRequest()->getHostInfo()) . ($pathInfo === '' ? '' : '/' . $pathInfo), '/');
         }
 
         if (!preg_match($rule->pattern, $pathInfo, $matches)) {

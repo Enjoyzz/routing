@@ -69,7 +69,7 @@ class Manager
     {
 
         $builtRules = [];
-        $verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
+        //$verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
         foreach ($ruleDeclarations as $key => $rule) {
 //            if (is_string($rule)) {
 //                $rule = ['route' => $rule];

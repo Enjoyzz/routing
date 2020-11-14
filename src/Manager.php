@@ -110,17 +110,14 @@ class Manager
      */
     public function setBaseUrl(string $value): void
     {
-        $baseUrl = $value;
-
-        if (strpos($value, '/', -1) === false) {
-            $baseUrl = $baseUrl . '/';
+        if (substr($value, -1, 1) !== '/') {
+            $value = $value . '/';
         }
 
-        if (strpos($value, '/', 0) === false) {
-            $baseUrl = '/' . $baseUrl;
+        if (substr($value, 0, 1) !== '/') {
+            $value = '/' . $value;
         }
-
-        $this->baseUrl = $baseUrl;
+        $this->baseUrl = $value;
     }
 
     /**

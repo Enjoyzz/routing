@@ -42,7 +42,7 @@ class Rule
 
     /**
 
-     * @param array $config
+     * @param  array $config
      * @throws Exception\ConfigRuleException
      */
     public function __construct(array $config)
@@ -90,10 +90,10 @@ class Rule
         if ($this->host !== null) {
             $this->host = rtrim($this->host, '/');
             $this->pattern = rtrim($this->host . '/' . $this->pattern, '/');
-//        } elseif ($this->pattern === '') {
-//            $this->_template = '';
-//            //$this->pattern = '#^$#u';
-//            return;
+            //        } elseif ($this->pattern === '') {
+            //            $this->_template = '';
+            //            //$this->pattern = '#^$#u';
+            //            return;
         } elseif (($pos = strpos($this->pattern, '://')) !== false) {
             if (($pos2 = strpos($this->pattern, '/', $pos + 3)) !== false) {
                 $this->host = substr($this->pattern, 0, $pos2);
@@ -110,7 +110,7 @@ class Rule
             $this->pattern = '/' . $this->pattern . '/';
         }
         // \Enjoys\dump( $this->pattern);
-//
+        //
         if (strpos($this->route, '<') !== false && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
             foreach ($matches[1] as $name) {
                 $this->routeParams[$name] = "<$name>";
@@ -122,8 +122,8 @@ class Rule
      * Prepares [[$pattern]] on rule initialization - replace parameter names by placeholders.
      *
      * @param bool $allowAppendSlash Defines position of slash in the param pattern in [[$pattern]].
-     * If `false` slash will be placed at the beginning of param pattern. If `true` slash position will be detected
-     * depending on non-optional pattern part.
+     *                               If `false` slash will be placed at the beginning of param pattern. If `true` slash position will be detected
+     *                               depending on non-optional pattern part.
      */
     private function translatePattern($allowAppendSlash): void
     {
@@ -154,20 +154,18 @@ class Rule
                     $length = strlen($match[0][0]);
                     $offset = $match[0][1];
                     $requiredPatternPart = str_replace("/{$match[0][0]}/", '//', $requiredPatternPart);
-                    if (
-                            $allowAppendSlash && ($appendSlash || $offset === 1) &&
-                            (($offset - $oldOffset) === 1) &&
-                            isset($this->pattern[$offset + $length]) &&
-                            $this->pattern[$offset + $length] === '/' &&
-                            isset($this->pattern[$offset + $length + 1])
+                    if ($allowAppendSlash && ($appendSlash || $offset === 1) 
+                        && (($offset - $oldOffset) === 1) 
+                        && isset($this->pattern[$offset + $length]) 
+                        && $this->pattern[$offset + $length] === '/' 
+                        && isset($this->pattern[$offset + $length + 1])
                     ) {
                         // if pattern starts from optional params, put slash at the end of param pattern
                         // @see https://github.com/yiisoft/yii2/issues/13086
                         $appendSlash = true;
                         $tr["<$name>/"] = "((?P<$placeholder>$pattern)/)?";
-                    } elseif (
-                            $offset > 1 && (string) $this->pattern[$offset - 1] === '/' &&
-                            (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')
+                    } elseif ($offset > 1 && (string) $this->pattern[$offset - 1] === '/' 
+                        && (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')
                     ) {
                         $appendSlash = false;
                         $tr["/<$name>"] = "(/(?P<$placeholder>$pattern))?";
@@ -189,11 +187,11 @@ class Rule
                 }
 
                 /* \enjoys */
-//                if (isset($this->_routeParams[$name])) {
-//                    $tr2["<$name>"] = "(?P<$placeholder>$pattern)";
-//                } else {
-//                    $this->_paramRules[$name] = $pattern === '[^\/]+' ? '' : "#^$pattern$#u";
-//                }
+                //                if (isset($this->_routeParams[$name])) {
+                //                    $tr2["<$name>"] = "(?P<$placeholder>$pattern)";
+                //                } else {
+                //                    $this->_paramRules[$name] = $pattern === '[^\/]+' ? '' : "#^$pattern$#u";
+                //                }
             }
         }
 

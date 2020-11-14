@@ -12,19 +12,19 @@ namespace Enjoys\Route\Request;
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor 
- * @author Enjoys
+ * @author         Enjoys
  */
 class Request extends \Symfony\Component\HttpFoundation\Request implements RequestInterface
 {
     /**
      * 
-     * @param string|null $key
-     * @param mixed $default
+     * @param  string|null $key
+     * @param  mixed       $default
      * @return mixed
      */
     public function get(?string $key = null, $default = null)
     {
-        if($key === null){
+        if($key === null) {
             return $this->query->all();
         }
         return parent::get($key, $default);

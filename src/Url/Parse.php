@@ -18,8 +18,8 @@ namespace Enjoys\Route\Url;
 class Parse
 {
 
-//    private \Enjoys\Route\Manager $manager;
-//    private \Enjoys\Route\Request\RequestInterface $request;
+    //    private \Enjoys\Route\Manager $manager;
+    //    private \Enjoys\Route\Request\RequestInterface $request;
 
     /**
      *
@@ -64,7 +64,7 @@ class Parse
 
     /**
      * 
-     * @return  array<array-key, mixed>|null
+     * @return array<array-key, mixed>|null
      */
     public function getParams()
     {

@@ -29,16 +29,16 @@ class RuleParse extends BaseParse implements \Enjoys\Route\Url\ParseInterface
             }
         }
 
-//        if ($this->getManager()->getOption('enableStrictParsing')) {
-//            return false;
-//        }
+        //        if ($this->getManager()->getOption('enableStrictParsing')) {
+        //            return false;
+        //        }
 
         return parent::parse();
     }
 
     /**
      * 
-     * @param \Enjoys\Route\Rule $rule
+     * @param  \Enjoys\Route\Rule $rule
      * @return false|array{rule: string|null, route: string|null, params: array<array-key, mixed>}
      */
     private function parseRequest(\Enjoys\Route\Rule $rule)

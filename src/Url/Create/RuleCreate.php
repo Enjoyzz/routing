@@ -32,7 +32,7 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
 
     /**
      * 
-     * @param \Enjoys\Route\Rule $rule
+     * @param  \Enjoys\Route\Rule $rule
      * @return false|string
      */
     private function create(\Enjoys\Route\Rule $rule)
@@ -57,18 +57,16 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
 
         foreach ($rule->ruleParams as $name => $_rule) {
           
-            if (
-                    array_key_exists($name, $this->params) &&
-                    !is_array($this->params[$name]) &&
-                    ($_rule === '' || preg_match($_rule, (string) $this->params[$name]))
+            if (array_key_exists($name, $this->params) 
+                && !is_array($this->params[$name]) 
+                && ($_rule === '' || preg_match($_rule, (string) $this->params[$name]))
             ) {
                 $translate["<$name>"] = ($rule->encodeParams) ? urlencode((string) $this->params[$name]) : $this->params[$name];
 
                 unset($this->params[$name]);
                 
-            } elseif (
-                    !isset($rule->defaults[$name]) ||
-                    isset($this->params[$name])
+            } elseif (!isset($rule->defaults[$name]) 
+                || isset($this->params[$name])
             ) {
               
                 return false;
@@ -109,14 +107,14 @@ class RuleCreate extends BaseCreate implements \Enjoys\Route\Url\CreateInterface
         return $url;
     }
 
-//    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule)
-//    {
-//        foreach ($rule->placeholders as $placeholder => $name) {
-//            if (isset($matches[$placeholder])) {
-//                $matches[$name] = $matches[$placeholder];
-//                unset($matches[$placeholder]);
-//            }
-//        }
-//        return $matches;
-//    }
+    //    protected function substitutePlaceholderNames(array $matches, \Enjoys\Route\Rule $rule)
+    //    {
+    //        foreach ($rule->placeholders as $placeholder => $name) {
+    //            if (isset($matches[$placeholder])) {
+    //                $matches[$name] = $matches[$placeholder];
+    //                unset($matches[$placeholder]);
+    //            }
+    //        }
+    //        return $matches;
+    //    }
 }

@@ -33,8 +33,8 @@ class Helpers
 
     /**
      * 
-     * @param string $url
-     * @param string|bool $scheme
+     * @param  string      $url
+     * @param  string|bool $scheme
      * @return string
      */
     public static function ensureScheme(string $url, $scheme)

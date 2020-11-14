@@ -71,19 +71,19 @@ class Manager
         $builtRules = [];
         //$verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
         foreach ($ruleDeclarations as $key => $rule) {
-//            if (is_string($rule)) {
-//                $rule = ['route' => $rule];
-//                if (preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
-//                    $rule['verb'] = explode(',', $matches[1]);
-//                    // rules that are not applicable for GET requests should not be used to create URLs
-//                    if (!in_array('GET', $rule['verb'], true)) {
-//                        $rule['mode'] = Rule::PARSING_ONLY;
-//                    }
-//                    $key = $matches[4];
-//                }
-//                $rule['pattern'] = $key;
-//               
-//            }
+            //            if (is_string($rule)) {
+            //                $rule = ['route' => $rule];
+            //                if (preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
+            //                    $rule['verb'] = explode(',', $matches[1]);
+            //                    // rules that are not applicable for GET requests should not be used to create URLs
+            //                    if (!in_array('GET', $rule['verb'], true)) {
+            //                        $rule['mode'] = Rule::PARSING_ONLY;
+            //                    }
+            //                    $key = $matches[4];
+            //                }
+            //                $rule['pattern'] = $key;
+            //               
+            //            }
             if (is_array($rule)) {
                 $rule = new Rule($rule);
             }

@@ -15,9 +15,9 @@ namespace Enjoys\Route\Traits;
 trait Manager
 {
     protected \Enjoys\Route\Manager $manager;
-    
+
     protected function getManager(): \Enjoys\Route\Manager
     {
         return $this->manager;
-    }    
+    }
 }

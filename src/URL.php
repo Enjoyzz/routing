@@ -1,30 +1,29 @@
 <?php
+
 namespace Enjoys\Route;
-
-
 
 /**
  * @https://github.com/yiisoft/yii2/blob/master/framework/helpers/BaseUrl.php
  */
 class URL
 {
-    
+
     public static Manager $urlManager;
-   
-    
-  
+
+
+
     public static function setUrlmanager(Manager $urlManager): void
     {
         static::$urlManager = $urlManager;
     }
-    
-    public static function getUrlManager() : Manager
+
+    public static function getUrlManager(): Manager
     {
         return static::$urlManager;
     }
-    
+
     /**
-     * 
+     *
      * @param  string      $route
      * @param  array       $params
      * @param  bool|string $scheme
@@ -33,11 +32,11 @@ class URL
     public static function toRoute(string $route, array $params, $scheme = false): string
     {
 
-       
+
         $createUrl = new \Enjoys\Route\Url\Create($route, $params, static::getUrlManager());
-        
+
         $url = $createUrl->returnUrl();
-        
+
         if ($scheme === true) {
             $url = $createUrl->createAbsoluteUrl($url);
         }
@@ -48,7 +47,7 @@ class URL
 
 
     /**
-     * 
+     *
      * @param  string|array $url
      * @param  bool|string  $scheme
      * @return string
@@ -74,9 +73,4 @@ class URL
         //        }
         return Helpers::ensureScheme($url, $scheme);
     }
-    
-  
-    
-  
-
 }

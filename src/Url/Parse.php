@@ -46,7 +46,7 @@ class Parse
     }
 
     /**
-     * 
+     *
      * @return mixed|null
      */
     public function getRoute()
@@ -63,12 +63,12 @@ class Parse
     }
 
     /**
-     * 
+     *
      * @return array<array-key, mixed>|null
      */
     public function getParams()
     {
-        
+
         return (isset($this->result['params']))  ? $this->result['params'] : null;
     }
 }

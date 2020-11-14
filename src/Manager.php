@@ -30,7 +30,7 @@ class Manager
 
     public function setSuffix(string $suffix = ''): void
     {
-        
+
         $this->suffix = $suffix;
     }
 
@@ -82,7 +82,7 @@ class Manager
             //                    $key = $matches[4];
             //                }
             //                $rule['pattern'] = $key;
-            //               
+            //
             //            }
             if (is_array($rule)) {
                 $rule = new Rule($rule);
@@ -94,7 +94,7 @@ class Manager
     }
 
     /**
-     * 
+     *
      * @return string
      * @throws Exception\ManagerException
      */
@@ -105,13 +105,13 @@ class Manager
     }
 
     /**
-     * 
+     *
      * @param string $value
      */
     public function setBaseUrl(string $value): void
     {
         $baseUrl = $value;
-        
+
         if (strpos($value, '/', -1) === false) {
             $baseUrl = $baseUrl . '/';
         }
@@ -124,21 +124,20 @@ class Manager
     }
 
     /**
-     * 
+     *
      * @return string
      * @throws Exception\ManagerException
      */
     public function getScriptUrl(): string
     {
         if ($this->scriptUrl === null) {
-
             throw new Exception\ManagerException('Please configure UrlManager::scriptUrl correctly as you are running a console application.');
         }
         return $this->scriptUrl;
     }
 
     /**
-     * 
+     *
      * @param string $value
      */
     public function setScriptUrl(string $value): void
@@ -147,7 +146,7 @@ class Manager
     }
 
     /**
-     * 
+     *
      * @return string
      * @throws Exception\ManagerException
      */
@@ -160,7 +159,7 @@ class Manager
     }
 
     /**
-     * 
+     *
      * @param string $value
      */
     public function setHostInfo(string $value): void

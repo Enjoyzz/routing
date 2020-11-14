@@ -32,7 +32,7 @@ class Helpers
     }
 
     /**
-     * 
+     *
      * @param  string      $url
      * @param  string|bool $scheme
      * @return string

@@ -34,12 +34,12 @@ interface RequestInterface
     public function getHost();
 
     /**
-     * 
+     *
      * @param  string|null $key
      * @param  mixed       $default
      * @return mixed
      */
     public function get(string $key = null, $default = null);
-    
+
     function addQuery(array $params): void;
 }

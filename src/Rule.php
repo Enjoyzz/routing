@@ -69,7 +69,6 @@ class Rule
         }
 
         if ($this->verb !== null) {
-
             foreach ($this->verb as $i => $verb) {
                 $this->verb[$i] = strtoupper($verb);
             }
@@ -142,7 +141,6 @@ class Rule
 
 
         if (preg_match_all('/<([\w._-]+):?([^>]+)?>/', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
-
             $appendSlash = false;
             foreach ($matches as $match) {
                 //dump($match);
@@ -154,17 +152,19 @@ class Rule
                     $length = strlen($match[0][0]);
                     $offset = $match[0][1];
                     $requiredPatternPart = str_replace("/{$match[0][0]}/", '//', $requiredPatternPart);
-                    if ($allowAppendSlash && ($appendSlash || $offset === 1) 
-                        && (($offset - $oldOffset) === 1) 
-                        && isset($this->pattern[$offset + $length]) 
-                        && $this->pattern[$offset + $length] === '/' 
+                    if (
+                        $allowAppendSlash && ($appendSlash || $offset === 1)
+                        && (($offset - $oldOffset) === 1)
+                        && isset($this->pattern[$offset + $length])
+                        && $this->pattern[$offset + $length] === '/'
                         && isset($this->pattern[$offset + $length + 1])
                     ) {
                         // if pattern starts from optional params, put slash at the end of param pattern
                         // @see https://github.com/yiisoft/yii2/issues/13086
                         $appendSlash = true;
                         $tr["<$name>/"] = "((?P<$placeholder>$pattern)/)?";
-                    } elseif ($offset > 1 && (string) $this->pattern[$offset - 1] === '/' 
+                    } elseif (
+                        $offset > 1 && (string) $this->pattern[$offset - 1] === '/'
                         && (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')
                     ) {
                         $appendSlash = false;

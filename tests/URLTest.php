@@ -72,6 +72,7 @@ class URLTest extends \PHPUnit\Framework\TestCase
             ['/sub', ['\Core\\Signin', 'id' => 5], true, 'http://localhost/sub/login?id=5'],
             ['sub', ['\Core\\Signin', 'id' => 5], false, '/sub/login?id=5'],
             ['sub', ['\Core\\Signin', 'id' => 5], true, 'http://localhost/sub/login?id=5'],
+            ['sub/', ['\Core\\Signin', 'id' => 5], true, 'http://localhost/sub/login?id=5'],
             ['/', ['Route\\Conrete', 'id' => 5], true, 'http://localhost/?route=Route\Conrete&id=5'],
             ['/', ['\Core\Index'], false, '/'],
             ['/test', ['\Core\Index'], false, '/test/'],
